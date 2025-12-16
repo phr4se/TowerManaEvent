@@ -1,0 +1,100 @@
+settings:
+  hologram-type: DECENT_HOLOGRAMS
+  world-name: "world"
+  coordinate-range-x: 1000
+  coordinate-range-z: 1000
+  schematic-name: "event"
+  stages:
+    one:
+      pvp: false
+      duration: 1000
+      available-abilities:
+        - "SPIDER_WEB"
+      open-chest: false
+    two:
+      pvp: false
+      duration: 1000
+      available-abilities:
+        - "SPIDER_WEB"
+        - "FIREBALL"
+        - "HORSE"
+      open-chest: false
+    three:
+      pvp: true
+      duration: 1000
+      available-abilities:
+        - "SPIDER_WEB"
+        - "FIREBALL"
+        - "HORSE"
+        - "SPLASH_PUNCH"
+      open-chest: true
+  use-abilities: 6000
+  abilities:
+    - "FIREBALL;50"
+    - "HORSE;50"
+    - "SPIDER_WEB;50"
+    - "SPLASH_PUNCH;50"
+  mana: 100
+  settings-abilities:
+    fireball:
+      radius-search-players: 10
+      damage: 10
+      count-fireball: 10
+      boost-y: 3
+      offset-location-x: 5
+      offset-location-z: 5
+      offset-x: 1
+      offset-y: 1
+      offset-z: 1
+      speed: 3
+    horse:
+      damage: 10
+      distance: 3
+      num-one: -2
+      num-two: 3
+      forward-blocks: 5
+      speed: 0.2
+      knockback-blocks: 3
+      later-death: 100
+    spider-web:
+      radius-search-players: 10
+      damage: 10
+      radius: 3
+      later-remove: 100
+    splash-punch:
+      damage: 10
+      count: 1
+      later-count: 100
+      radius: 1
+      step-radius: 1
+      later-forward: 100
+      particle-count: 50
+      later-forward-particle: 50
+      step: 1
+      radius-search-players: 1
+      later-back: 100
+      later-back-particle: 100
+  hologram-lines:
+    - ""
+    - "Мана: %mana%"
+    - "Стадия: %stage%"
+    - ""
+  chances:
+    1:
+      material: diamond_sword
+      chance: 50.0
+      enchantments:
+        - ""
+  messages-start-event:
+    - ""
+    - "Ивент запущен %x% %y% %z%"
+    - ""
+  messages-end-event:
+    - ""
+    - "Ивент окончен"
+    - ""
+  bar-message: "Коорд %x% %y% %z% | Стадия %stage% | Окончание стадии %remaining% | Пвп %pvp%"
+  bar-color: ""
+  bar-style: ""
+  bar-flags:
+    - ""
