@@ -21,7 +21,7 @@ public class StageManager {
         for(StageType stageType : StageType.values()) {
             stageType.initialize(plugin);
             Stage stage = stageType.getStage();
-            stages.put(stage.getId(), stage);
+            stages.put(stage.getId() - 1, stage);
         }
 
     }

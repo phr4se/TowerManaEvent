@@ -61,7 +61,7 @@ public class SpiderWeb extends Ability {
 
         if(chest.getMana() < mana) return;
 
-        chest.setMana(chest.getMana() - mana);
+        chest.subtractMana(mana);
 
         for (Entity entity : location.getNearbyEntities(x, y, z)) {
 

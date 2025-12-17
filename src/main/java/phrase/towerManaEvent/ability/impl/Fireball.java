@@ -54,7 +54,7 @@ public class Fireball extends Ability {
 
         if(chest.getMana() < mana) return;
 
-        chest.setMana(chest.getMana() - mana);
+        chest.subtractMana(mana);
 
         Set<Player> players = new HashSet<>();
         for(Entity entity : location.getNearbyEntities(x, y, z)) {

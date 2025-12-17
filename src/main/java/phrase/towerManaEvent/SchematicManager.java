@@ -17,7 +17,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import phrase.towerManaEvent.ability.Ability;
 import phrase.towerManaEvent.ability.AbilityType;
 import phrase.towerManaEvent.event.Chest;
 
@@ -44,11 +43,11 @@ public class SchematicManager {
 
         try(EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(pos1.getWorld()))) {
             Clipboard clipboard = ClipboardFormats.findByFile(file).getReader(new FileInputStream(file)).read();
-            this.protectedCuboidRegion = new ProtectedCuboidRegion("TowerManaEvent_" + UUID.randomUUID(), clipboard.getMinimumPoint(), clipboard.getMaximumPoint());
-            WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(pos1.getWorld())).addRegion(protectedCuboidRegion);
             BlockVector3 dimensions = clipboard.getDimensions();
             pos2 = new Location(pos1.getWorld(), pos1.getBlockX() + dimensions.getBlockX(), pos1.getBlockY() + dimensions.getBlockY(), pos1.getBlockZ() + dimensions.getBlockZ());
-            Operation operation = new ClipboardHolder(clipboard).createPaste(editSession).to(BlockVector3.at(pos1.getX(), pos1.getY(), pos1.getZ())).build();
+            this.protectedCuboidRegion = new ProtectedCuboidRegion(UUID.randomUUID().toString(), BlockVector3.at(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ()), BlockVector3.at(pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ()));
+            WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(pos1.getWorld())).addRegion(protectedCuboidRegion);
+            Operation operation = new ClipboardHolder(clipboard).createPaste(editSession).to(BlockVector3.at(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ())).build();
             saveBlocks();
             Operations.complete(operation);
             editSession.flushSession();
@@ -132,6 +131,14 @@ public class SchematicManager {
 
     public Location getPos1() {
         return pos1;
+    }
+
+    public Location getPos2() {
+        return pos2;
+    }
+
+    public ProtectedCuboidRegion getProtectedCuboidRegion() {
+        return protectedCuboidRegion;
     }
 
 }

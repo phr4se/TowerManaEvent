@@ -1,9 +1,12 @@
 package phrase.towerManaEvent;
 
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import phrase.towerManaEvent.event.Chest;
 import phrase.towerManaEvent.event.EventManager;
@@ -51,4 +54,18 @@ public class PlayerListener implements Listener {
         }
 
     }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+
+        Player player = event.getPlayer();
+
+        EventManager eventManager = plugin.getEventManager();
+
+        if(!eventManager.isEventRunning()) return;
+
+        if(eventManager.playerAtEvent(player)) eventManager.getChest().addMana(plugin.getConfigFile().getSettings().plusMana());
+
+    }
+
 }

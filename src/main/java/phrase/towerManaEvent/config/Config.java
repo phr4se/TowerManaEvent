@@ -6,22 +6,19 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import phrase.towerManaEvent.Plugin;
-import phrase.towerManaEvent.ability.Ability;
 import phrase.towerManaEvent.ability.AbilityType;
-import phrase.towerManaEvent.ability.impl.SplashPunch;
 import phrase.towerManaEvent.config.data.*;
 import phrase.towerManaEvent.hologram.HologramType;
 import phrase.towerManaEvent.util.Utils;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +35,6 @@ public class Config {
     private HorseSettings horseSettings;
     private SpiderWebSettings spiderWebSettings;
     private SplashPunchSettings splashPunchSettings;
-
 
     public Config(Plugin plugin) {
         this.plugin = plugin;
@@ -60,7 +56,7 @@ public class Config {
             File file = new File(plugin.getDataFolder(), fileName);
 
             if(!file.exists()) {
-                plugin.saveResource(file.getPath(), false);
+                plugin.saveResource(fileName, false);
             }
 
         }
@@ -73,11 +69,15 @@ public class Config {
 
     public void setupMessages() {
 
-        final ConfigurationSection configurationSectionMessages = plugin.getConfig().getConfigurationSection("messages");
+        final ConfigurationSection configurationSectionMessages = getFile("messages.yml").getConfigurationSection("messages");
 
         prefix = Utils.COLORIZER.colorize(configurationSectionMessages.getString("prefix"));
 
-        messages = new Messages();
+        messages = new Messages(Utils.COLORIZER.colorize(configurationSectionMessages.getString("no-permission")),
+                Utils.COLORIZER.colorize(configurationSectionMessages.getString("unknown-command")),
+                Utils.COLORIZER.colorize(configurationSectionMessages.getString("error")),
+                Utils.COLORIZER.colorize(configurationSectionMessages.getString("incorrect-arguments")),
+                Utils.COLORIZER.colorize(configurationSectionMessages.getString("not-a-player")));
 
         final ConfigurationSection configurationSectionCommandMessages = configurationSectionMessages.getConfigurationSection("command");
 
@@ -105,14 +105,16 @@ public class Config {
             Material material = Material.valueOf(configurationSectionChances.getString(key + ".material"));
             double chance = configurationSectionChances.getDouble(key + ".chance");
             Map<Enchantment, Integer> enchantments = new HashMap<>();
-            configurationSectionChances.getStringList(key + ".enchantments").forEach(string -> {
-                String[] strings = string.split(";");
-                Enchantment enchantment = Enchantment.getByKey(NamespacedKey.fromString(strings[0]));
-                int level = Integer.parseInt(strings[1]);
-                enchantments.put(enchantment, level);
-            });
             ItemStack itemStack = new ItemStack(material);
-            itemStack.addEnchantments(enchantments);
+            if(configurationSectionChances.contains(key + ".enchantments")) {
+                configurationSectionChances.getStringList(key + ".enchantments").forEach(string -> {
+                    String[] strings = string.split(";");
+                    Enchantment enchantment = Enchantment.getByKey(NamespacedKey.fromString(strings[0]));
+                    int level = Integer.parseInt(strings[1]);
+                    enchantments.put(enchantment, level);
+                });
+                itemStack.addEnchantments(enchantments);
+            }
             chances.put(itemStack, chance);
         });
 
@@ -126,12 +128,15 @@ public class Config {
                 configurationSection.getInt("mana"),
                 configurationSection.getStringList("hologram-lines"),
                 chances,
-                configurationSection.getStringList("messages-start-event"),
-                configurationSection.getStringList("messages-end-event"),
+                configurationSection.getStringList("actions-start-event"),
+                configurationSection.getStringList("actions-end-event"),
                 configurationSection.getString("bar-message"),
                 BarColor.valueOf(configurationSection.getString("bar-color")),
                 BarStyle.valueOf(configurationSection.getString("bar-style")),
-                configurationSection.getStringList("bar-flags").stream().map(BarFlag::valueOf).toArray(BarFlag[]::new));
+                (configurationSection.contains("bar-flags")) ? configurationSection.getStringList("bar-flags").stream().map(BarFlag::valueOf).toArray(BarFlag[]::new) : new BarFlag[0],
+                configurationSection.getInt("plus-mana"),
+                configurationSection.getStringList("actions-switch-stage"),
+                configurationSection.getString("type"));
 
     }
 
@@ -234,5 +239,4 @@ public class Config {
     public SplashPunchSettings getSplashPunchSettings() {
         return splashPunchSettings;
     }
-
 }

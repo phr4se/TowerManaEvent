@@ -23,7 +23,7 @@ public class ActionTransformer {
 
             while (matcher.find()) {
 
-                actionType = ActionType.valueOf(matcher.group(1));
+                actionType = ActionType.valueOf(matcher.group(1).toUpperCase());
                 string = matcher.group(2);
 
             }

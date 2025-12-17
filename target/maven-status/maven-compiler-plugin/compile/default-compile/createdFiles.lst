@@ -1,0 +1,5 @@
+phrase\towerManaEvent\PlayerListener.class
+phrase\towerManaEvent\command\CommandLogger.class
+phrase\towerManaEvent\command\CommandMapper.class
+phrase\towerManaEvent\LootManager.class
+phrase\towerManaEvent\Plugin.class

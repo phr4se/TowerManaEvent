@@ -44,7 +44,7 @@ public class Horse extends Ability {
 
         if(chest.getMana() < mana) return;
 
-        chest.setMana(chest.getMana() - mana);
+        chest.subtractMana(mana);
 
         Vector perpendicular = new Vector(-location.getDirection().getZ(), 0, location.getDirection().getX());
 

@@ -31,8 +31,12 @@ public class Chest {
         return abilities.get(abilityType);
     }
 
-    public void setMana(int mana) {
-        this.mana = mana;
+    public void addMana(int mana) {
+        this.mana += mana;
+    }
+
+    public void subtractMana(int mana) {
+        this.mana -= mana;
     }
 
     public int getMana() {

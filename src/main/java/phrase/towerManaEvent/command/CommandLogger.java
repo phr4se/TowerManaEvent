@@ -1,6 +1,7 @@
 package phrase.towerManaEvent.command;
 
 import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.command.impl.ManaEventCommand;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,10 +15,11 @@ public class CommandLogger {
     public CommandLogger(Plugin plugin) {
         this.plugin = plugin;
         this.commands = new HashMap<>();
+        initialize();
     }
 
-    public void initialize(Plugin plugin) {
-
+    private void initialize() {
+        commands.put("event", new CommandDescription("towermanaevent.event", new ManaEventCommand(plugin)));
     }
 
     public Map<String, CommandDescription> getCommands() {

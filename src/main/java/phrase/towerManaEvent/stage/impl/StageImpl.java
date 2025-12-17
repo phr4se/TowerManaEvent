@@ -1,6 +1,8 @@
 package phrase.towerManaEvent.stage.impl;
 
 import org.bukkit.block.Chest;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import phrase.towerManaEvent.Plugin;
 import phrase.towerManaEvent.ability.AbilityType;
@@ -20,7 +22,10 @@ public class StageImpl extends Stage {
     @Override
     public void setup() {
         startTask();
-        if(openChest) ((Chest)plugin.getEventManager().getChest().getLocation().getBlock()).getInventory().setContents(plugin.getLootManager().getRandomLoots());
+        if(openChest) {
+            Inventory inventory = ((Chest)plugin.getEventManager().getChest().getLocation().getBlock().getState()).getInventory();
+            for(ItemStack itemStack : plugin.getLootManager().getRandomLoots()) inventory.addItem(itemStack);
+        }
     }
 
     @Override
@@ -33,13 +38,14 @@ public class StageImpl extends Stage {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(remained <= 0) {
+
+                if(remained == 0) {
                     cancel();
                     plugin.getEventManager().switchStage();
-                    return;
+                } else {
+                    if(remained > 0) remained--;
                 }
 
-                remained--;
             }
         }.runTaskTimerAsynchronously(plugin, 0L, 20L);
 

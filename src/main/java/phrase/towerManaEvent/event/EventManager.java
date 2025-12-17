@@ -17,8 +17,11 @@ import phrase.towerManaEvent.ability.impl.Fireball;
 import phrase.towerManaEvent.ability.impl.Horse;
 import phrase.towerManaEvent.ability.impl.SpiderWeb;
 import phrase.towerManaEvent.ability.impl.SplashPunch;
+import phrase.towerManaEvent.action.ActionExecutor;
+import phrase.towerManaEvent.action.ActionTransformer;
 import phrase.towerManaEvent.config.Config;
 import phrase.towerManaEvent.config.data.*;
+import phrase.towerManaEvent.event.privilege.PrivilegeManager;
 import phrase.towerManaEvent.hologram.HologramProvider;
 import phrase.towerManaEvent.stage.Stage;
 import phrase.towerManaEvent.stage.StageManager;
@@ -27,6 +30,7 @@ import phrase.towerManaEvent.util.Utils;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class EventManager {
 
@@ -36,8 +40,9 @@ public class EventManager {
     private Stage stage;
     private Chest chest;
     private BukkitTask bukkitTaskUseAbilities;
-    private BukkitTask bukkitTaskHologram;
+    private BukkitTask bukkitTaskBossBar;
     private boolean eventRunning;
+    private BukkitTask bukkitTaskSearchPlayers;
 
     public EventManager(Plugin plugin) {
         this.plugin = plugin;
@@ -86,12 +91,39 @@ public class EventManager {
                         eventRunning = true;
 
                         schematicManager = new SchematicManager(new File(plugin.getDataFolder() + "/schematics/" + settings.schematicName()), finalLocation);
-                        hologramProvider.createHologram(finalLocation.clone().add(0.5, 2, 0.5), settings.hologramLines());
+                        schematicManager.setSchematic();
                         chest = schematicManager.getChest(settings.abilities(), settings.mana());
                         stage.setup();
                         startTaskUseAbilities();
-                        broadcastMessages(settings.messagesStartEvent());
+                        hologramProvider.createHologram(chest.getLocation().clone().add(0.5, 2, 0.5), settings.hologramLines());
                         enableBossBar();
+                        List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsStartEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
+                        plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
+
+                        EventManager.this.bukkitTaskSearchPlayers = new BukkitRunnable() {
+
+                            final PrivilegeManager privilegeManager = plugin.getPrivilegeManager();
+
+                            @Override
+                            public void run() {
+
+                                for(Player player : plugin.getServer().getOnlinePlayers()) {
+
+                                    if(playerAtEvent(player) && privilegeManager.hasPrivilege(player)) {
+
+                                        new BukkitRunnable() {
+                                            @Override
+                                            public void run() {
+                                                privilegeManager.disablePrivilege(player);
+                                            }
+                                        }.runTask(plugin);
+
+                                    }
+
+                                }
+
+                            }
+                        }.runTaskTimerAsynchronously(plugin, 0L, 20L);
 
                     }
                 }.runTask(plugin);
@@ -160,48 +192,43 @@ public class EventManager {
         hologramProvider.removeHologram();
 
         eventRunning = false;
-        broadcastMessages(plugin.getConfigFile().getSettings().messagesEndEvent());
+        List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsEndEvent().stream().map(this::replacePlaceholder).collect(Collectors.toList());
+        plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
         disableBossBar();
 
-    }
+        bukkitTaskBossBar.cancel();
+        bukkitTaskSearchPlayers.cancel();
 
-    private void broadcastMessages(List<String> messages) {
-        plugin.getServer().getOnlinePlayers().forEach(player -> messages.forEach(message -> Utils.sendMessage(player, replacePlaceholder(message))));
     }
 
     private String replacePlaceholder(String message) {
         Location pos = schematicManager.getPos1();
-        return message.replace("%x%", String.valueOf(pos.getX()))
-                .replace("%y%", String.valueOf(pos.getY()))
-                .replace("%z%", String.valueOf(pos.getZ()));
+        return message.replace("%x%", String.valueOf(pos.getBlockX()))
+                .replace("%y%", String.valueOf(pos.getBlockY()))
+                .replace("%z%", String.valueOf(pos.getBlockZ()));
     }
 
     private void enableBossBar() {
 
         Server server = plugin.getServer();
 
-        BossBar bossBar = null;
+        BossBar bossBar;
 
         String barMessage = plugin.getConfigFile().getSettings().barMessage();
-        if(server.getBossBar(NamespacedKey.fromString("TowerManaEvent_BossBar")) == null) {
-            Settings settings = plugin.getConfigFile().getSettings();
-            bossBar = server.createBossBar(NamespacedKey.fromString("TowerManaEvent_BossBar"), replacePlaceholderBossBar(barMessage), settings.barColor(), settings.barStyle(), settings.barFlags());
-        } else {
-            bossBar = server.getBossBar(NamespacedKey.fromString("TowerManaEvent_BossBar"));
-        }
+
+        Settings settings = plugin.getConfigFile().getSettings();
+        bossBar = server.createBossBar(NamespacedKey.fromString("towermanaevent_bossbar"), replacePlaceholderBossBar(barMessage), settings.barColor(), settings.barStyle(), settings.barFlags());
 
         bossBar.setVisible(true);
-
-        BossBar finalBossBar = bossBar;
-        bukkitTaskHologram = new BukkitRunnable() {
+        bukkitTaskBossBar = new BukkitRunnable() {
             @Override
             public void run() {
 
-                finalBossBar.setTitle(replacePlaceholderBossBar(barMessage));
-                finalBossBar.setProgress((double) stage.getDuration() / stage.getRemained());
-                final List<Player> players = finalBossBar.getPlayers();
+                bossBar.setTitle(replacePlaceholderBossBar(barMessage));
+                if(((double) stage.getRemained() / stage.getDuration()) <= 1.00) bossBar.setProgress((double) stage.getRemained() / stage.getDuration());
+                final List<Player> players = bossBar.getPlayers();
                 server.getOnlinePlayers().forEach(player -> {
-                    if(!players.contains(player)) finalBossBar.addPlayer(player);
+                    if(!players.contains(player)) bossBar.addPlayer(player);
                 });
 
             }
@@ -211,24 +238,41 @@ public class EventManager {
 
     private String replacePlaceholderBossBar(String barMessage) {
         Location pos = schematicManager.getPos1();
-        return Utils.COLORIZER.colorize(barMessage.replace("%x%", String.valueOf(pos.getX()))
-                .replace("%y%", String.valueOf(pos.getY()))
-                .replace("%z%", String.valueOf(pos.getZ()))
+        return Utils.COLORIZER.colorize(barMessage.replace("%x%", String.valueOf(pos.getBlockX()))
+                .replace("%y%", String.valueOf(pos.getBlockY()))
+                .replace("%z%", String.valueOf(pos.getBlockZ()))
                 .replace("%stage%", String.valueOf(stage.getId()))
                 .replace("%pvp%", String.valueOf(stage.isPvp()))
                 .replace("%remaining%", String.valueOf(stage.getRemained())));
     }
 
     private void disableBossBar() {
-        bukkitTaskHologram.cancel();
-        BossBar bossBar = plugin.getServer().getBossBar(NamespacedKey.fromString("TowerManaEvent_BossBar"));
+        bukkitTaskBossBar.cancel();
+        BossBar bossBar = plugin.getServer().getBossBar(NamespacedKey.fromString("towermanaevent_bossbar"));
         bossBar.setVisible(false);
         bossBar.removeAll();
+        plugin.getServer().removeBossBar(NamespacedKey.fromString("towermanaevent_bossbar"));
+    }
+
+    public boolean playerAtEvent(Player player) {
+        Location location = player.getLocation();
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        int z = location.getBlockZ();
+
+        Location pos1 = schematicManager.getPos1();
+        Location pos2 = schematicManager.getPos2();
+
+        return (x >= pos1.getBlockX() && x <= pos2.getBlockX() && y >= pos1.getBlockY() && y <= pos2.getBlockY() && z >= pos1.getBlockZ() && z <= pos2.getBlockZ());
     }
 
     public void switchStage() {
         this.stage = plugin.getStageManager().getNextStage(stage);
-        if(stage != null) stage.setup();
+        if(stage != null) {
+            stage.setup();
+            List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsSwitchStage().stream().map(this::replacePlaceholder).collect(Collectors.toList());
+            plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
+        }
         else stopEvent();
     }
 
@@ -243,4 +287,5 @@ public class EventManager {
     public Stage getStage() {
         return stage;
     }
+
 }

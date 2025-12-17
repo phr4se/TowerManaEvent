@@ -52,7 +52,7 @@ public class SplashPunch extends Ability {
 
         if(chest.getMana() < mana) return;
 
-        chest.setMana(chest.getMana() - mana);
+        chest.subtractMana(mana);
 
         for (int i = 1; i <= count; i++) {
 

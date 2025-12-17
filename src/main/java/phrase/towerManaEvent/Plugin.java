@@ -12,6 +12,7 @@ import phrase.towerManaEvent.command.CommandMapper;
 import phrase.towerManaEvent.command.CommandResult;
 import phrase.towerManaEvent.config.Config;
 import phrase.towerManaEvent.event.EventManager;
+import phrase.towerManaEvent.event.privilege.PrivilegeManager;
 import phrase.towerManaEvent.hologram.HologramFactory;
 import phrase.towerManaEvent.hologram.HologramProvider;
 import phrase.towerManaEvent.stage.StageManager;
@@ -20,12 +21,13 @@ import phrase.towerManaEvent.util.Utils;
 public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     private final CommandLogger commandLogger = new CommandLogger(this);
-    private final CommandMapper commandMapper = new CommandMapper(commandLogger);
+    private final CommandMapper commandMapper = new CommandMapper(commandLogger, this);
     private final Config config = new Config(this);
     private final StageManager stageManager = new StageManager(this);
     private HologramProvider hologramProvider;
-    private final EventManager eventManager = new EventManager(this);
+    private EventManager eventManager;
     private LootManager lootManager;
+    private PrivilegeManager privilegeManager;
 
     @Override
     public void onEnable() {
@@ -40,6 +42,9 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
         lootManager = new LootManager(config.getSettings().chances());
         hologramProvider = HologramFactory.getHologramProvider(config.getSettings().hologramType(), this);
+        privilegeManager = new PrivilegeManager();
+        privilegeManager.setPrivilege(config.getSettings().type(),this);
+        eventManager = new EventManager(this);
 
         getCommand("mana").setExecutor(this);
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -68,11 +73,8 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
             }
 
-        } else {
+        } else Utils.sendMessage(sender, config.getMessages().notAPlayer());
 
-            // TODO
-
-        }
 
         return true;
     }
@@ -95,6 +97,10 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     public LootManager getLootManager() {
         return lootManager;
+    }
+
+    public PrivilegeManager getPrivilegeManager() {
+        return privilegeManager;
     }
 
 }

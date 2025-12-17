@@ -31,7 +31,7 @@ public enum StageType {
             case ONE -> {
                 final ConfigurationSection configurationSectionOne = configurationSection.getConfigurationSection("one");
                 this.setStage(new StageImpl(
-                        0,
+                        1,
                         configurationSectionOne.getBoolean("pvp"),
                         configurationSectionOne.getInt("duration"),
                         plugin,
@@ -40,7 +40,7 @@ public enum StageType {
             }
             case TWO -> {
                 final ConfigurationSection configurationSectionTwo = configurationSection.getConfigurationSection("two");
-                this.setStage(new StageImpl(1,
+                this.setStage(new StageImpl(2,
                         configurationSectionTwo.getBoolean("pvp"),
                         configurationSectionTwo.getInt("duration"),
                         plugin,
@@ -49,7 +49,7 @@ public enum StageType {
             }
             case THREE -> {
                 final ConfigurationSection configurationSectionThree = configurationSection.getConfigurationSection("three");
-                this.setStage(new StageImpl(2,
+                this.setStage(new StageImpl(3,
                         configurationSectionThree.getBoolean("pvp"),
                         configurationSectionThree.getInt("duration"),
                         plugin,
