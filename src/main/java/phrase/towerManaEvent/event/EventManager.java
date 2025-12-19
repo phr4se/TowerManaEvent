@@ -10,26 +10,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import phrase.towerManaEvent.Plugin;
-import phrase.towerManaEvent.SchematicManager;
-import phrase.towerManaEvent.ability.Ability;
-import phrase.towerManaEvent.ability.AbilityType;
-import phrase.towerManaEvent.ability.impl.Fireball;
-import phrase.towerManaEvent.ability.impl.Horse;
-import phrase.towerManaEvent.ability.impl.SpiderWeb;
-import phrase.towerManaEvent.ability.impl.SplashPunch;
+import phrase.towerManaEvent.event.ability.Ability;
+import phrase.towerManaEvent.event.ability.AbilityType;
+import phrase.towerManaEvent.event.ability.impl.Fireball;
+import phrase.towerManaEvent.event.ability.impl.Horse;
+import phrase.towerManaEvent.event.ability.impl.SpiderWeb;
+import phrase.towerManaEvent.event.ability.impl.SplashPunch;
 import phrase.towerManaEvent.action.ActionExecutor;
 import phrase.towerManaEvent.action.ActionTransformer;
 import phrase.towerManaEvent.config.Config;
 import phrase.towerManaEvent.config.data.*;
+import phrase.towerManaEvent.event.exception.EventAlreadyRun;
+import phrase.towerManaEvent.event.exception.SchematicDamaged;
+import phrase.towerManaEvent.event.exception.SchematicNotExist;
 import phrase.towerManaEvent.event.privilege.PrivilegeManager;
 import phrase.towerManaEvent.hologram.HologramProvider;
-import phrase.towerManaEvent.stage.Stage;
-import phrase.towerManaEvent.stage.StageManager;
+import phrase.towerManaEvent.event.stage.Stage;
+import phrase.towerManaEvent.event.stage.StageManager;
 import phrase.towerManaEvent.util.Utils;
 
 import java.io.File;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventManager {
@@ -38,11 +39,12 @@ public class EventManager {
     private final HologramProvider hologramProvider;
     private SchematicManager schematicManager;
     private Stage stage;
-    private Chest chest;
     private BukkitTask bukkitTaskUseAbilities;
     private BukkitTask bukkitTaskBossBar;
     private boolean eventRunning;
     private BukkitTask bukkitTaskSearchPlayers;
+    private final List<Player> players = new ArrayList<>();
+    private Map<Location, Loot> loots;
 
     public EventManager(Plugin plugin) {
         this.plugin = plugin;
@@ -51,13 +53,21 @@ public class EventManager {
 
     public void startEvent() {
 
+        if(eventRunning) throw new EventAlreadyRun("Ивент уже запущен");
+
+        final Config config = plugin.getConfigFile();
+        final Settings settings = config.getSettings();
+
+        schematicManager = new SchematicManager(plugin, new File(plugin.getDataFolder() + "/schematics/" + settings.schematicName()), settings.regionFlagsName());
+
+        if (!schematicManager.existsSchematic()) throw new SchematicNotExist("Схематика не существует");
+
+        if(schematicManager.schematicDamaged()) throw new SchematicDamaged("Схематика повреждена");
+
         new BukkitRunnable() {
 
             @Override
             public void run() {
-
-                Config config = plugin.getConfigFile();
-                Settings settings = config.getSettings();
 
                 World world = settings.world();
 
@@ -90,12 +100,11 @@ public class EventManager {
                     public void run() {
                         eventRunning = true;
 
-                        schematicManager = new SchematicManager(new File(plugin.getDataFolder() + "/schematics/" + settings.schematicName()), finalLocation);
-                        schematicManager.setSchematic();
-                        chest = schematicManager.getChest(settings.abilities(), settings.mana());
+                        schematicManager.setSchematic(finalLocation);
+                        loots = schematicManager.setChests(settings.abilities(), settings.mana());
                         stage.setup();
                         startTaskUseAbilities();
-                        hologramProvider.createHologram(chest.getLocation().clone().add(0.5, 2, 0.5), settings.hologramLines());
+                        loots.values().forEach(loot -> hologramProvider.createHologram(loot.getLocation().clone().add(0.5, 2, 0.5), loot, settings.hologramLines()));
                         enableBossBar();
                         List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsStartEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
                         plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
@@ -109,16 +118,22 @@ public class EventManager {
 
                                 for(Player player : plugin.getServer().getOnlinePlayers()) {
 
-                                    if(playerAtEvent(player) && privilegeManager.hasPrivilege(player)) {
+                                    if(playerAtEvent(player)) {
 
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                privilegeManager.disablePrivilege(player);
-                                            }
-                                        }.runTask(plugin);
+                                        if(!players.contains(player)) players.add(player);
 
-                                    }
+                                        if(privilegeManager.hasPrivilege(player)){
+
+                                            new BukkitRunnable() {
+                                                @Override
+                                                public void run() {
+                                                    privilegeManager.disablePrivilege(player);
+                                                }
+                                            }.runTask(plugin);
+
+                                        }
+
+                                    } else players.remove(player);
 
                                 }
 
@@ -147,11 +162,13 @@ public class EventManager {
             @Override
             public void run() {
 
+                Loot loot = getRandomLoot();
+
                 AbilityType abilityType;
                 do {
-                    abilityType = chest.getRandomAbility();
+                    abilityType = loot.getRandomAbility();
                 } while (!stage.getAvailableAbilities().contains(abilityType));
-                int mana = chest.getAbilityMana(abilityType);
+                int mana = loot.getAbilityMana(abilityType);
 
                 AbilityType finalAbilityType = abilityType;
                 new BukkitRunnable() {
@@ -160,20 +177,24 @@ public class EventManager {
 
                         switch (finalAbilityType) {
                             case HORSE -> {
-                                Ability ability = new Horse(mana, horseSettings.damage(), chest.getLocation(), horseSettings.distance(), horseSettings.num1(), horseSettings.num2(), plugin, horseSettings.forwardBlocks(), horseSettings.speed(), horseSettings.knockbackBlocks(), horseSettings.laterDeath());
-                                ability.use(chest);
+                                Ability ability = new Horse(mana, horseSettings.damage(), loot.getLocation(), horseSettings.distance(), horseSettings.num1(), horseSettings.num2(), plugin, horseSettings.forwardBlocks(), horseSettings.speed(), horseSettings.knockbackBlocks(), horseSettings.laterDeath());
+                                ability.use(loot);
+                                stage.setLatestUsedAbility(ability);
                             }
                             case FIREBALL -> {
-                                Ability ability = new Fireball(mana, fireballSettings.damage(), chest.getLocation(), fireballSettings.radiusSearchPlayers(), fireballSettings.radiusSearchPlayers(), fireballSettings.radiusSearchPlayers(), fireballSettings.countFireball(), fireballSettings.boostY(), fireballSettings.offsetLocationX(), fireballSettings.offsetLocationZ(), fireballSettings.offsetX(), fireballSettings.offsetY(), fireballSettings.offsetZ(), fireballSettings.speed(), plugin);
-                                ability.use(chest);
+                                Ability ability = new Fireball(mana, fireballSettings.damage(), loot.getLocation(), fireballSettings.radiusSearchPlayers(), fireballSettings.radiusSearchPlayers(), fireballSettings.radiusSearchPlayers(), fireballSettings.countFireball(), fireballSettings.boostY(), fireballSettings.offsetLocationX(), fireballSettings.offsetLocationZ(), fireballSettings.offsetX(), fireballSettings.offsetY(), fireballSettings.offsetZ(), fireballSettings.speed(), plugin);
+                                ability.use(loot);
+                                stage.setLatestUsedAbility(ability);
                             }
                             case SPIDER_WEB -> {
-                                Ability ability = new SpiderWeb(mana, spiderWebSettings.damage(), chest.getLocation(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radius(), plugin, spiderWebSettings.laterRemove());
-                                ability.use(chest);
+                                Ability ability = new SpiderWeb(mana, spiderWebSettings.damage(), loot.getLocation(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radiusSearchPlayers(), spiderWebSettings.radius(), plugin, spiderWebSettings.laterRemove());
+                                ability.use(loot);
+                                stage.setLatestUsedAbility(ability);
                             }
                             case SPLASH_PUNCH -> {
-                                Ability ability = new SplashPunch(mana, splashPunchSettings.damage(), splashPunchSettings.count(), splashPunchSettings.laterCount(), splashPunchSettings.radius(), splashPunchSettings.stepRadius(), splashPunchSettings.laterForward(), plugin, splashPunchSettings.particleCount(), splashPunchSettings.laterForwardParticle(), splashPunchSettings.step(), chest.getLocation(), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.laterBack(), splashPunchSettings.laterBackParticle());
-                                ability.use(chest);
+                                Ability ability = new SplashPunch(mana, splashPunchSettings.damage(), splashPunchSettings.count(), splashPunchSettings.laterCount(), splashPunchSettings.radius(), splashPunchSettings.stepRadius(), splashPunchSettings.laterForward(), plugin, splashPunchSettings.particleCount(), splashPunchSettings.laterForwardParticle(), splashPunchSettings.step(), loot.getLocation().clone().add(0, 0.5, 0), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.radiusSearchPlayers(), splashPunchSettings.laterBack(), splashPunchSettings.laterBackParticle());
+                                ability.use(loot);
+                                stage.setLatestUsedAbility(ability);
                             }
                         }
 
@@ -187,17 +208,27 @@ public class EventManager {
 
     private void stopEvent() {
 
-        schematicManager.regenerationBlocks();
-        bukkitTaskUseAbilities.cancel();
-        hologramProvider.removeHologram();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
 
-        eventRunning = false;
-        List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsEndEvent().stream().map(this::replacePlaceholder).collect(Collectors.toList());
-        plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
-        disableBossBar();
+                eventRunning = false;
 
-        bukkitTaskBossBar.cancel();
-        bukkitTaskSearchPlayers.cancel();
+                bukkitTaskUseAbilities.cancel();
+                loots.forEach((key, value) -> hologramProvider.removeHologram(value));
+
+                List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsEndEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
+                plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
+                disableBossBar();
+
+                bukkitTaskBossBar.cancel();
+                bukkitTaskSearchPlayers.cancel();
+
+                schematicManager.regenerationBlocks();
+
+
+            }
+        }.runTask(plugin);
 
     }
 
@@ -242,7 +273,7 @@ public class EventManager {
                 .replace("%y%", String.valueOf(pos.getBlockY()))
                 .replace("%z%", String.valueOf(pos.getBlockZ()))
                 .replace("%stage%", String.valueOf(stage.getId()))
-                .replace("%pvp%", String.valueOf(stage.isPvp()))
+                .replace("%pvp%", (stage.isPvp()) ? "вкл." : "выкл.")
                 .replace("%remaining%", String.valueOf(stage.getRemained())));
     }
 
@@ -267,11 +298,13 @@ public class EventManager {
     }
 
     public void switchStage() {
-        this.stage = plugin.getStageManager().getNextStage(stage);
+        this.stage = plugin.getStageManager().getNextStage();
         if(stage != null) {
             stage.setup();
-            List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsSwitchStage().stream().map(this::replacePlaceholder).collect(Collectors.toList());
+            Settings settings = plugin.getConfigFile().getSettings();
+            List<String> settingsReplacedPlaceholder = settings.actionsSwitchStage().stream().map(this::replacePlaceholder).collect(Collectors.toList());
             plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
+            loots.values().forEach(loot -> loot.addMana(settings.plusManaStage()));
         }
         else stopEvent();
     }
@@ -280,12 +313,23 @@ public class EventManager {
         return eventRunning;
     }
 
-    public Chest getChest() {
-        return chest;
-    }
-
     public Stage getStage() {
         return stage;
     }
 
+    public int getCountPlayers() {
+        return players.size();
+    }
+
+    public Loot getLoot(Location location) {
+        return loots.get(location);
+    }
+
+    public Loot getRandomLoot() {
+        return loots.values().stream().toList().get(new Random().nextInt(loots.size()));
+    }
+
+    public Map<Location, Loot> getLoots() {
+        return loots;
+    }
 }

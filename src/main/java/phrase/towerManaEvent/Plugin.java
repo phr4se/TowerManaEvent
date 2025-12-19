@@ -6,24 +6,27 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import phrase.towerManaEvent.ability.impl.SpiderWeb;
 import phrase.towerManaEvent.command.CommandLogger;
 import phrase.towerManaEvent.command.CommandMapper;
 import phrase.towerManaEvent.command.CommandResult;
 import phrase.towerManaEvent.config.Config;
 import phrase.towerManaEvent.event.EventManager;
+import phrase.towerManaEvent.event.LootManager;
 import phrase.towerManaEvent.event.privilege.PrivilegeManager;
+import phrase.towerManaEvent.gui.MenuManager;
 import phrase.towerManaEvent.hologram.HologramFactory;
 import phrase.towerManaEvent.hologram.HologramProvider;
-import phrase.towerManaEvent.stage.StageManager;
+import phrase.towerManaEvent.listener.PlayerListener;
+import phrase.towerManaEvent.event.stage.StageManager;
 import phrase.towerManaEvent.util.Utils;
 
 public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     private final CommandLogger commandLogger = new CommandLogger(this);
     private final CommandMapper commandMapper = new CommandMapper(commandLogger, this);
-    private final Config config = new Config(this);
+    private final Config config = new Config(this);;
     private final StageManager stageManager = new StageManager(this);
+    private final MenuManager menuManager = new MenuManager(this);
     private HologramProvider hologramProvider;
     private EventManager eventManager;
     private LootManager lootManager;
@@ -52,9 +55,7 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
     }
 
     @Override
-    public void onDisable() {
-        SpiderWeb.removeSpiderWeb();
-    }
+    public void onDisable() {}
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -101,6 +102,10 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     public PrivilegeManager getPrivilegeManager() {
         return privilegeManager;
+    }
+
+    public MenuManager getMenuManager() {
+        return menuManager;
     }
 
 }

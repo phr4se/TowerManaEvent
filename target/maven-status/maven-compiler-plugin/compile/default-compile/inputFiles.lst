@@ -29,8 +29,10 @@ C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phras
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Settings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\SpiderWebSettings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\SplashPunchSettings.java
-C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\Chest.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\EventManager.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\exception\EventAlreadyRun.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\exception\SchematicDamaged.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\exception\SchematicNotExist.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\privilege\impl\EssentialsX.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\privilege\impl\Vanilla.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\privilege\Privilege.java
@@ -44,9 +46,11 @@ C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phras
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\hologram\HologramType.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\hologram\impl\DecentHologramsProvider.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\hologram\impl\DecentHologramsService.java
-C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\LootManager.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\loot\Loot.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\loot\LootManager.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\PlayerListener.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\Plugin.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\RegionFlag.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\SchematicManager.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\stage\impl\StageImpl.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\stage\Stage.java

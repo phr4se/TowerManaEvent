@@ -8,32 +8,32 @@ settings:
       pvp: false
       duration: 120
       available-abilities:
-        - "SPIDER_WEB"
+        - "SPLASH_PUNCH"
       open-chest: false
     two:
       pvp: false
       duration: 120
       available-abilities:
-        - "SPIDER_WEB"
         - "FIREBALL"
-        - "HORSE"
       open-chest: false
     three:
       pvp: true
       duration: 120
       available-abilities:
-        - "SPIDER_WEB"
-        - "FIREBALL"
         - "HORSE"
-        - "SPLASH_PUNCH"
       open-chest: true
-  use-abilities: 1200
+  use-abilities: 120 # В тиках
   abilities:
     - "FIREBALL;50"
     - "HORSE;50"
     - "SPIDER_WEB;50"
     - "SPLASH_PUNCH;50"
-  mana: 100
+  mana: 100000
+  chests:
+    1:
+      offset-x: 5
+      offset-y: 0
+      offset-z: 5
   settings-abilities:
     fireball:
       radius-search-players: 10
@@ -51,10 +51,10 @@ settings:
       distance: 3
       num-one: -2
       num-two: 3
-      forward-blocks: 5
+      forward-blocks: 3
       speed: 0.2
-      knockback-blocks: 2
-      later-death: 100
+      knockback-blocks: 3
+      later-death: 20
     spider-web:
       radius-search-players: 10
       damage: 1
@@ -67,10 +67,10 @@ settings:
       radius: 10
       step-radius: 3
       later-forward: 1
-      particle-count: 50
+      particle-count: 70
       later-forward-particle: 0
       step: 0.5
-      radius-search-players: 1
+      radius-search-players: 10
       later-back: 1
       later-back-particle: 0
   hologram-provider: "DECENT_HOLOGRAMS"
@@ -78,13 +78,34 @@ settings:
     - ""
     - "&bМана: &f%mana%"
     - "&dСтадия: &f%stage%"
+    - "&fПоследняя способность: &6%ability%"
     - ""
   chances:
     1:
-      material: diamond_sword
+      material: DIAMOND_SWORD
       chance: 50.0
       # enchantments:
         # - Зачарование;Уровень
+    2:
+      material: DIAMOND_SWORD
+      chance: 30.0
+      # enchantments:
+      # - Зачарование;Уровень
+    3:
+      material: DIAMOND_SWORD
+      chance: 10.0
+      # enchantments:
+      # - Зачарование;Уровень
+    4:
+      material: DIAMOND_SWORD
+      chance: 20.0
+      # enchantments:
+      # - Зачарование;Уровень
+    5:
+      material: DIAMOND_SWORD
+      chance: 30
+      # enchantments:
+      # - Зачарование;Уровень
   actions-start-event:
     - ""
     - "[broadcast] &fИвент запущен &6%x% %y% %z%"
@@ -103,3 +124,7 @@ settings:
     - ""
     - "[broadcast] &fСтадия переключена"
     - ""
+  type: "Essentials"
+  region-flags:
+    - "BUILD: DENY"
+  plus-mana-stage: 100

@@ -5,18 +5,20 @@ import eu.decentsoftware.holograms.api.holograms.Hologram;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import phrase.towerManaEvent.Plugin;
-import phrase.towerManaEvent.event.Chest;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.hologram.HologramService;
+import phrase.towerManaEvent.event.Loot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 class DecentHologramsService implements HologramService {
 
     private final Plugin plugin;
-    private Hologram hologram;
-    private List<String> lines;
+    private final Map<Loot, Hologram> holograms = new HashMap<>();
+    private final Map<Loot, List<String>> lines = new HashMap<>();
     private boolean updateHologram;
 
     public DecentHologramsService(Plugin plugin) {
@@ -24,14 +26,14 @@ class DecentHologramsService implements HologramService {
     }
 
     @Override
-    public void createHologram(Location location, List<String> lines) {
+    public void createHologram(Location location, Loot loot, List<String> lines) {
 
-        this.lines = lines;
+        this.lines.put(loot, lines);
 
-        Hologram hologram = DHAPI.getHologram("TowerManaEvent");
+        Hologram hologram = DHAPI.getHologram(loot.getUuid().toString());
         if(hologram != null) hologram.delete();
 
-        this.hologram = DHAPI.createHologram("TowerManaEvent", location, getReplacedLines(lines));
+        holograms.put(loot, DHAPI.createHologram(loot.getUuid().toString(), location, getReplacedLines(loot)));
 
         this.updateHologram = true;
         updateHologram();
@@ -39,22 +41,21 @@ class DecentHologramsService implements HologramService {
     }
 
     @Override
-    public void removeHologram() {
-
+    public void removeHologram(Loot loot) {
         this.updateHologram = false;
-        hologram.delete();
-
+        holograms.remove(loot).delete();
+        lines.remove(loot);
     }
 
-    private String replacePlaceholder(String message) {
+    private String replacePlaceholder(Loot loot, String message) {
         EventManager eventManager = plugin.getEventManager();
-        Chest chest = eventManager.getChest();
-        return message.replace("%mana%", String.valueOf(chest.getMana()))
-                .replace("%stage%", String.valueOf(eventManager.getStage().getId()));
+        return message.replace("%mana%", String.valueOf(loot.getMana()))
+                .replace("%stage%", String.valueOf(eventManager.getStage().getId()))
+                .replace("%ability%", (eventManager.getStage().getLatestUsedAbility() != null) ? eventManager.getStage().getLatestUsedAbility().getName() : "-");
     }
 
-    private List<String> getReplacedLines(List<String> lines) {
-        return lines.stream().map(this::replacePlaceholder).collect(Collectors.toList());
+    private List<String> getReplacedLines(Loot loot) {
+        return lines.get(loot).stream().map(string -> replacePlaceholder(loot, string)).collect(Collectors.toList());
     }
 
     private void updateHologram() {
@@ -68,7 +69,7 @@ class DecentHologramsService implements HologramService {
                     return;
                 }
 
-                DHAPI.setHologramLines(hologram, getReplacedLines(lines));
+                holograms.forEach((key, value) -> DHAPI.setHologramLines(value, getReplacedLines(key)));
 
             }
         }.runTaskTimer(plugin, 0L, 1L);

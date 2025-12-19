@@ -7,3 +7,7 @@ messages:
   not-a-player: "&cВы не являетесь игроком"
 
   command:
+    event-already-run: "&fИвент уже запущен"
+    schematic-damaged: "&cСхематика повреждена"
+    schematic-not-exist: "&cСхематики не существует"
+    event-run: "&fИвент запущен"

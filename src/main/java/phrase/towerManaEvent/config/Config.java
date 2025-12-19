@@ -12,13 +12,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import phrase.towerManaEvent.Plugin;
-import phrase.towerManaEvent.ability.AbilityType;
+import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.config.data.*;
 import phrase.towerManaEvent.hologram.HologramType;
 import phrase.towerManaEvent.util.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +80,10 @@ public class Config {
 
         final ConfigurationSection configurationSectionCommandMessages = configurationSectionMessages.getConfigurationSection("command");
 
-        commandMessages = new CommandMessages();
+        commandMessages = new CommandMessages(Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("event-already-run")),
+                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("schematic-damaged")),
+                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("schematic-not-exist")),
+                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("event-run")));
 
     }
 
@@ -136,7 +138,9 @@ public class Config {
                 (configurationSection.contains("bar-flags")) ? configurationSection.getStringList("bar-flags").stream().map(BarFlag::valueOf).toArray(BarFlag[]::new) : new BarFlag[0],
                 configurationSection.getInt("plus-mana"),
                 configurationSection.getStringList("actions-switch-stage"),
-                configurationSection.getString("type"));
+                configurationSection.getString("type"),
+                configurationSection.getStringList("region-flags"),
+                configurationSection.getInt("plus-mana-stage"));
 
     }
 
@@ -146,7 +150,7 @@ public class Config {
 
         final ConfigurationSection configurationSectionFireball = configurationSection.getConfigurationSection("fireball");
 
-        fireballSettings = new FireballSettings(configurationSectionFireball.getInt("radius-serach-players"),
+        fireballSettings = new FireballSettings(configurationSectionFireball.getInt("radius-search-players"),
                 configurationSectionFireball.getDouble("damage"),
                 configurationSectionFireball.getInt("count-fireball"),
                 configurationSectionFireball.getInt("boost-y"),
@@ -190,7 +194,7 @@ public class Config {
                 configurationSectionSplashPunch.getLong("later-forward"),
                 configurationSectionSplashPunch.getInt("particle-count"),
                 configurationSectionSplashPunch.getLong("later-forward-particle"),
-                configurationSectionSplashPunch.getInt("step"),
+                configurationSectionSplashPunch.getDouble("step"),
                 configurationSectionSplashPunch.getInt("radius-search-players"),
                 configurationSectionSplashPunch.getLong("later-back"),
                 configurationSectionSplashPunch.getLong("later-back-particle")
