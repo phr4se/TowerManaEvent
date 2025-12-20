@@ -12,6 +12,8 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -139,6 +141,11 @@ public class SchematicManager {
 
         WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world)).removeRegion(protectedCuboidRegion.getId());
 
+    }
+
+    public void setPvp(boolean pvp) {
+        if(pvp) protectedCuboidRegion.setFlag(Flags.PVP, StateFlag.State.ALLOW);
+        else protectedCuboidRegion.setFlag(Flags.PVP, StateFlag.State.DENY);
     }
 
     public Location getPos1() {

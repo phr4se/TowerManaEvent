@@ -2,6 +2,7 @@ package phrase.towerManaEvent.listener;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +18,7 @@ import phrase.towerManaEvent.gui.MenuType;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ManaListener implements Listener {
 
@@ -36,56 +34,71 @@ public class ManaListener implements Listener {
         if(event.getCurrentItem() == null) return;
 
         ItemStack itemStack = event.getCurrentItem();
-        PersistentDataContainer persistentDataContainer = itemStack.getItemMeta().getPersistentDataContainer();
+        ItemMeta itemMeta = itemStack.getItemMeta();
 
-        double chance = persistentDataContainer.get(NamespacedKey.fromString("chance"), PersistentDataType.DOUBLE);
+        LootManager lootManager = plugin.getLootManager();
+
+        PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
+
+        String key;
+        if(persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING)) key = persistentDataContainer.get(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING);
+        else {
+            key = UUID.randomUUID().toString();
+            persistentDataContainer.set(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING, key);
+            itemStack.setItemMeta(itemMeta);
+            lootManager.add(key, itemStack, 0.0);
+        }
+
+        double chance = lootManager.getChance(key);
 
         if(event.isLeftClick()) chance += 10;
         else chance -= 10;
 
-        persistentDataContainer.set(NamespacedKey.fromString("chance"), PersistentDataType.DOUBLE, chance);
-
-        event.getCurrentItem().setLore(List.of(String.valueOf(chance)));
+        lootManager.recordChance(key, chance);
 
         plugin.getMenuManager().showMenu(event.getPlayer(), MenuType.MENU_CHANCES);
 
     }
 
     @EventHandler
-    public void onCloseMenuChances(CloseMenuChancesEvent event) {
+    public void onCloseMenuChances(CloseMenuChancesEvent event) throws IOException {
 
         LootManager lootManager = plugin.getLootManager();
 
+        final FileConfiguration fileConfiguration = plugin.getConfigFile().getFile("chances.yml");
+        final ConfigurationSection configurationSection = fileConfiguration.getConfigurationSection("chances");
+
         for (ItemStack itemStack : event.getInventory().getContents()) {
 
+            if(itemStack == null) continue;
+
             ItemMeta itemMeta = itemStack.getItemMeta();
-
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-            double chance = persistentDataContainer.get(NamespacedKey.fromString("chance"), PersistentDataType.DOUBLE);
 
-            lootManager.recordItemStack(itemStack, chance);
+            String key;
+            if(persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING)) key = persistentDataContainer.get(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING);
+            else {
+                key = UUID.randomUUID().toString();
+                persistentDataContainer.set(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING, key);
+                itemStack.setItemMeta(itemMeta);
+                lootManager.add(key, itemStack, 0.0);
+            }
 
-            ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.chances");
+            double chance = lootManager.getChance(key);
 
-            String randomUUID = UUID.randomUUID().toString();
-
-            configurationSection.set(randomUUID + ".material", itemStack.getType().toString());
-            configurationSection.set(randomUUID + ".chance", String.valueOf(chance));
+            configurationSection.set(key + ".material", itemStack.getType().toString());
+            configurationSection.set(key + ".chance", String.valueOf(chance));
 
             List<String> enchants = new ArrayList<>();
             if(itemMeta.hasEnchants()) {
 
                 for(Map.Entry<Enchantment, Integer> entry : itemMeta.getEnchants().entrySet()) enchants.add(entry.getKey().getKey() + ";" + entry.getValue());
-                configurationSection.set(randomUUID + ".enchantments", enchants);
+                configurationSection.set(key + ".enchantments", enchants);
 
             }
 
-        }
+            fileConfiguration.save(new File(plugin.getDataFolder(), "chances.yml"));
 
-        try {
-            plugin.getConfig().save(new File(plugin.getDataFolder(), "config.yml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
     }

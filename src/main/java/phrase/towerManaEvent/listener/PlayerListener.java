@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataType;
@@ -55,7 +56,7 @@ public class PlayerListener implements Listener {
 
         PluginManager pluginManager = plugin.getServer().getPluginManager();
 
-        Inventory inventory = event.getInventory();
+        Inventory inventory = event.getPlayer().getOpenInventory().getTopInventory();
 
         if (inventory.getHolder() instanceof MenuChancesService)
             pluginManager.callEvent(new CloseMenuChancesEvent(inventory));

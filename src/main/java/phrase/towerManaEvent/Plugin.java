@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import phrase.towerManaEvent.command.CommandLogger;
@@ -16,6 +17,7 @@ import phrase.towerManaEvent.event.privilege.PrivilegeManager;
 import phrase.towerManaEvent.gui.MenuManager;
 import phrase.towerManaEvent.hologram.HologramFactory;
 import phrase.towerManaEvent.hologram.HologramProvider;
+import phrase.towerManaEvent.listener.ManaListener;
 import phrase.towerManaEvent.listener.PlayerListener;
 import phrase.towerManaEvent.event.stage.StageManager;
 import phrase.towerManaEvent.util.Utils;
@@ -35,32 +37,37 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
 
-        saveDefaultConfig();
+        config.createFiles("messages.yml", "menus/menu-chances.yml", "chances.yml");
 
-        config.createFiles("messages.yml");
+        saveDefaultConfig();
 
         config.setupSettings();
         config.setupMessages();
         config.setupAbilitiesSettings();
 
-        lootManager = new LootManager(config.getSettings().chances());
+        lootManager = new LootManager(config.getSettings().chances(), config.getSettings().items());
         hologramProvider = HologramFactory.getHologramProvider(config.getSettings().hologramType(), this);
         privilegeManager = new PrivilegeManager();
         privilegeManager.setPrivilege(config.getSettings().type(),this);
         eventManager = new EventManager(this);
 
         getCommand("mana").setExecutor(this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        PluginManager pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvents(new PlayerListener(this), this);
+        pluginManager.registerEvents(new ManaListener(this), this);
 
     }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if(sender instanceof Player player) {
+
+            if(args.length == 0) return true;
 
             CommandResult commandResult = commandMapper.mapCommand(player, args[0], args);
 

@@ -48,104 +48,97 @@ public class Horse extends Ability {
 
         chest.subtractMana(mana);
 
-        for(int yaw = -90; yaw <= 180; yaw += 90) {
 
-            Location newLocation = location.clone();
-            newLocation.setY(yaw);
-            newLocation.setPitch(0f);
+        Vector perpendicular = new Vector(-location.getDirection().getZ(), 0, location.getDirection().getX());
 
-            Vector perpendicular = new Vector(-newLocation.getDirection().getZ(), 0, newLocation.getDirection().getX());
+        Map<Location, SkeletonHorse> skeletonHorses = new HashMap<>();
 
-            Map<Location, SkeletonHorse> skeletonHorses = new HashMap<>();
+        for (int i = num1; i < num2; i++) {
 
-            for (int i = num1; i < num2; i++) {
+            double offsetFromCenter = i * distance;
 
-                double offsetFromCenter = i * distance;
+            Location offsetLocation = location.clone().add(perpendicular.clone().multiply(offsetFromCenter));
 
-                Location offsetLocation = newLocation.add(perpendicular.clone().multiply(offsetFromCenter));
+            long yValue = (long) offsetLocation.getY();
 
-                long yValue = (long) offsetLocation.getY();
-
-                if (offsetLocation.getY() != (double) yValue) {
-                    offsetLocation.setY((int) Math.floor(offsetLocation.getY()));
-                }
-
-                while ((offsetLocation.clone().add(0, -1, 0).getBlock().getType()) == Material.AIR)
-                    offsetLocation.add(0, -1, 0);
-
-                SkeletonHorse skeletonHorse = newLocation.getWorld().spawn(offsetLocation, SkeletonHorse.class);
-
-                skeletonHorse.getPersistentDataContainer().set(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING, "towermanaevent_skeleton_horse");
-                skeletonHorse.setGliding(false);
-                Location finishPosition = offsetLocation.add(newLocation.getDirection().multiply(forwardBlocks));
-                skeletonHorses.put(finishPosition, skeletonHorse);
-
+            if (offsetLocation.getY() != (double) yValue) {
+                offsetLocation.setY((int) Math.floor(offsetLocation.getY()));
             }
 
-            new BukkitRunnable() {
+            while ((offsetLocation.clone().add(0, -1, 0).getBlock().getType()) == Material.AIR)
+                offsetLocation.add(0, -1, 0);
 
-                @Override
-                public void run() {
+            SkeletonHorse skeletonHorse = location.getWorld().spawn(offsetLocation, SkeletonHorse.class);
 
-                    skeletonHorses.entrySet().forEach(entry -> {
-                        Location finishPosition = entry.getKey();
-                        SkeletonHorse skeletonHorse = entry.getValue();
-                        Location startPosition = skeletonHorse.getLocation();
-
-
-                        for (Entity entity : startPosition.getNearbyEntities(1, 1, 1)) {
-                            if (entity instanceof Player player) {
-
-                                player.setVelocity(player.getLocation().getDirection().normalize().multiply(-knockbackBlocks));
-                                player.damage(damage);
-
-                            }
-                        }
-
-                        double toMoveX = 0, toMoveY = 0, toMoveZ = 0;
-
-                        if (Math.abs(startPosition.getX() - finishPosition.getX()) > 0.2) {
-                            if (startPosition.getX() > finishPosition.getX()) {
-                                toMoveX = -speed;
-                            } else {
-                                toMoveX = speed;
-                            }
-                        }
-
-                        if (Math.abs(startPosition.getY() - finishPosition.getY()) >= 1.0) {
-                            if (startPosition.getY() > finishPosition.getY()) {
-                                toMoveY = -1.0;
-                            } else {
-                                toMoveY = 1.0;
-                            }
-                        }
-
-                        if (Math.abs(startPosition.getZ() - finishPosition.getZ()) > 0.2) {
-                            if (startPosition.getZ() > finishPosition.getZ()) {
-                                toMoveZ = -speed;
-                            } else {
-                                toMoveZ = speed;
-                            }
-                        }
-
-                        skeletonHorse.setVelocity(new Vector(toMoveX, toMoveY, toMoveZ));
-                    });
-
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            skeletonHorses.entrySet().forEach(entry -> {
-                                SkeletonHorse skeletonHorse = entry.getValue();
-                                skeletonHorse.setHealth(0.0);
-                            });
-                            skeletonHorses.clear();
-                        }
-                    }.runTaskLater(plugin, laterDeath);
-
-                }
-            }.runTaskTimer(plugin, 0L, 1L);
+            skeletonHorse.getPersistentDataContainer().set(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING, "towermanaevent_skeleton_horse");
+            skeletonHorse.setGliding(false);
+            Location finishPosition = offsetLocation.add(location.getDirection().multiply(forwardBlocks));
+            skeletonHorses.put(finishPosition, skeletonHorse);
 
         }
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+
+                skeletonHorses.entrySet().forEach(entry -> {
+                    Location finishPosition = entry.getKey();
+                    SkeletonHorse skeletonHorse = entry.getValue();
+                    Location startPosition = skeletonHorse.getLocation();
+
+
+                    for (Entity entity : startPosition.getNearbyEntities(1, 1, 1)) {
+                        if (entity instanceof Player player) {
+
+                            player.setVelocity(player.getLocation().getDirection().normalize().multiply(-knockbackBlocks));
+                            player.damage(damage);
+
+                        }
+                    }
+
+                    double toMoveX = 0, toMoveY = 0, toMoveZ = 0;
+
+                    if (Math.abs(startPosition.getX() - finishPosition.getX()) > 0.2) {
+                        if (startPosition.getX() > finishPosition.getX()) {
+                            toMoveX = -speed;
+                        } else {
+                            toMoveX = speed;
+                        }
+                    }
+
+                    if (Math.abs(startPosition.getY() - finishPosition.getY()) >= 1.0) {
+                        if (startPosition.getY() > finishPosition.getY()) {
+                            toMoveY = -1.0;
+                        } else {
+                            toMoveY = 1.0;
+                        }
+                    }
+
+                    if (Math.abs(startPosition.getZ() - finishPosition.getZ()) > 0.2) {
+                        if (startPosition.getZ() > finishPosition.getZ()) {
+                            toMoveZ = -speed;
+                        } else {
+                            toMoveZ = speed;
+                        }
+                    }
+
+                    skeletonHorse.setVelocity(new Vector(toMoveX, toMoveY, toMoveZ));
+                });
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        skeletonHorses.entrySet().forEach(entry -> {
+                            SkeletonHorse skeletonHorse = entry.getValue();
+                            skeletonHorse.setHealth(0.0);
+                        });
+                        skeletonHorses.clear();
+                    }
+                }.runTaskLater(plugin, laterDeath);
+
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
 
 
     }

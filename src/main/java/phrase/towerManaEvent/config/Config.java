@@ -11,6 +11,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import phrase.towerManaEvent.Plugin;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.config.data.*;
@@ -72,18 +75,19 @@ public class Config {
 
         prefix = Utils.COLORIZER.colorize(configurationSectionMessages.getString("prefix"));
 
-        messages = new Messages(Utils.COLORIZER.colorize(configurationSectionMessages.getString("no-permission")),
-                Utils.COLORIZER.colorize(configurationSectionMessages.getString("unknown-command")),
-                Utils.COLORIZER.colorize(configurationSectionMessages.getString("error")),
-                Utils.COLORIZER.colorize(configurationSectionMessages.getString("incorrect-arguments")),
-                Utils.COLORIZER.colorize(configurationSectionMessages.getString("not-a-player")));
+        messages = new Messages(getMessagePrefixed(configurationSectionMessages.getString("no-permission")),
+                getMessagePrefixed(configurationSectionMessages.getString("unknown-command")),
+                getMessagePrefixed(configurationSectionMessages.getString("error")),
+                getMessagePrefixed(configurationSectionMessages.getString("incorrect-arguments")),
+                getMessagePrefixed(configurationSectionMessages.getString("not-a-player")));
 
         final ConfigurationSection configurationSectionCommandMessages = configurationSectionMessages.getConfigurationSection("command");
 
-        commandMessages = new CommandMessages(Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("event-already-run")),
-                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("schematic-damaged")),
-                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("schematic-not-exist")),
-                Utils.COLORIZER.colorize(configurationSectionCommandMessages.getString("event-run")));
+        commandMessages = new CommandMessages(getMessagePrefixed(configurationSectionCommandMessages.getString("event-already-run")),
+                getMessagePrefixed(configurationSectionCommandMessages.getString("schematic-damaged")),
+                getMessagePrefixed(configurationSectionCommandMessages.getString("schematic-not-exist")),
+                getMessagePrefixed(configurationSectionCommandMessages.getString("event-run")),
+                getMessagesPrefixed(configurationSectionCommandMessages.getStringList("manual")));
 
     }
 
@@ -100,12 +104,15 @@ public class Config {
             abilities.put(abilityType, mana);
         });
 
-        final Map<ItemStack, Double> chances = new HashMap<>();
+        final Map<String, Double> chances = new HashMap<>();
+        final Map<String, ItemStack> items = new HashMap<>();
 
-        final ConfigurationSection configurationSectionChances = configurationSection.getConfigurationSection("chances");
+
+        final FileConfiguration fileConfiguration = getFile("chances.yml");
+        final ConfigurationSection configurationSectionChances = fileConfiguration.getConfigurationSection("chances");
         configurationSectionChances.getKeys(false).forEach(key -> {
             Material material = Material.valueOf(configurationSectionChances.getString(key + ".material"));
-            double chance = configurationSectionChances.getDouble(key + ".chance");
+            double chance = Double.parseDouble(configurationSectionChances.getString(key + ".chance"));
             Map<Enchantment, Integer> enchantments = new HashMap<>();
             ItemStack itemStack = new ItemStack(material);
             if(configurationSectionChances.contains(key + ".enchantments")) {
@@ -117,7 +124,12 @@ public class Config {
                 });
                 itemStack.addEnchantments(enchantments);
             }
-            chances.put(itemStack, chance);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
+            persistentDataContainer.set(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING, key);
+            itemStack.setItemMeta(itemMeta);
+            chances.put(key, chance);
+            items.put(key, itemStack);
         });
 
         settings = new Settings(HologramType.valueOf(configurationSection.getString("hologram-provider").toUpperCase()),
@@ -140,7 +152,8 @@ public class Config {
                 configurationSection.getStringList("actions-switch-stage"),
                 configurationSection.getString("type"),
                 configurationSection.getStringList("region-flags"),
-                configurationSection.getInt("plus-mana-stage"));
+                configurationSection.getInt("plus-mana-stage"),
+                items);
 
     }
 

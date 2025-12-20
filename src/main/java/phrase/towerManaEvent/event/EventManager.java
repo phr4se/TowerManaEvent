@@ -219,9 +219,10 @@ public class EventManager {
 
                 List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getSettings().actionsEndEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
                 plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
-                disableBossBar();
 
                 bukkitTaskBossBar.cancel();
+                disableBossBar();
+
                 bukkitTaskSearchPlayers.cancel();
 
                 schematicManager.regenerationBlocks();
@@ -256,7 +257,10 @@ public class EventManager {
             public void run() {
 
                 bossBar.setTitle(replacePlaceholderBossBar(barMessage));
-                if(((double) stage.getRemained() / stage.getDuration()) <= 1.00) bossBar.setProgress((double) stage.getRemained() / stage.getDuration());
+                if(stage != null) {
+                    if (((double) stage.getRemained() / stage.getDuration()) <= 1.00)
+                        bossBar.setProgress((double) stage.getRemained() / stage.getDuration());
+                }
                 final List<Player> players = bossBar.getPlayers();
                 server.getOnlinePlayers().forEach(player -> {
                     if(!players.contains(player)) bossBar.addPlayer(player);
@@ -317,10 +321,6 @@ public class EventManager {
         return stage;
     }
 
-    public int getCountPlayers() {
-        return players.size();
-    }
-
     public Loot getLoot(Location location) {
         return loots.get(location);
     }
@@ -332,4 +332,9 @@ public class EventManager {
     public Map<Location, Loot> getLoots() {
         return loots;
     }
+
+    public void setPvp(boolean pvp) {
+        schematicManager.setPvp(pvp);
+    }
+
 }

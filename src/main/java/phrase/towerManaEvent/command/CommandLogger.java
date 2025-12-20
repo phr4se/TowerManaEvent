@@ -1,6 +1,7 @@
 package phrase.towerManaEvent.command;
 
 import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.command.impl.ManaChancesCommand;
 import phrase.towerManaEvent.command.impl.ManaEventCommand;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class CommandLogger {
 
     private void initialize() {
         commands.put("event", new CommandDescription("towermanaevent.event", new ManaEventCommand(plugin)));
+        commands.put("chances", new CommandDescription("towermanaevent.chances", new ManaChancesCommand(plugin)));
     }
 
     public Map<String, CommandDescription> getCommands() {

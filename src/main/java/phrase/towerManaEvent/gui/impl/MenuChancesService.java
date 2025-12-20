@@ -10,16 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.event.LootManager;
 import phrase.towerManaEvent.gui.MenuService;
-import phrase.towerManaEvent.gui.MenuType;
 import phrase.towerManaEvent.util.Utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 public class MenuChancesService implements MenuService, InventoryHolder {
 
@@ -35,34 +34,31 @@ public class MenuChancesService implements MenuService, InventoryHolder {
 
     @Override
     public @NotNull Inventory getInventory() {
-
-        ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("chances");
-
-        configurationSection.getKeys(false).forEach(key -> {
-            Material material = Material.valueOf(configurationSection.getString(key + ".material"));
-            double chance = configurationSection.getDouble(key + ".chance");
-            Map<Enchantment, Integer> enchantments = new HashMap<>();
-            ItemStack itemStack = new ItemStack(material);
-            if(configurationSection.contains(key + ".enchantments")) {
-                configurationSection.getStringList(key + ".enchantments").forEach(string -> {
-                    String[] strings = string.split(";");
-                    Enchantment enchantment = Enchantment.getByKey(NamespacedKey.fromString(strings[0]));
-                    int level = Integer.parseInt(strings[1]);
-                    enchantments.put(enchantment, level);
-                });
-                itemStack.addEnchantments(enchantments);
-            }
-            itemStack.getItemMeta().getPersistentDataContainer().set(NamespacedKey.fromString("chance"), PersistentDataType.DOUBLE, chance);
-            itemStack.setLore(List.of(String.valueOf(chance)));
-            inventory.addItem(itemStack);
-        });
-
         return inventory;
     }
 
     @Override
     public Inventory create(Player player) {
+
+        FileConfiguration fileConfiguration = plugin.getConfigFile().getFile("menus/menu-chances.yml");
+        ConfigurationSection configurationSection = fileConfiguration.getConfigurationSection("menu");
+        List<String> addLore = configurationSection.getStringList("add-lore").stream().map(Utils.COLORIZER::colorize).collect(Collectors.toList());
+
+        LootManager lootManager = plugin.getLootManager();
+        lootManager.getItems().entrySet().stream().forEach(entry -> {
+            ItemStack itemStack = entry.getValue();
+            List<String> lore;
+            if(itemStack.getLore() == null) lore = new ArrayList<>();
+            else lore = itemStack.getLore();
+            double chance = lootManager.getChance(entry.getKey());
+            lore.addAll(addLore.stream().map(string -> string.replace("%chance%", String.valueOf(chance))).collect(Collectors.toList()));
+            ItemStack newItemStack = itemStack.clone();
+            newItemStack.setLore(lore);
+            inventory.addItem(newItemStack);
+        });
+
         return inventory;
+
     }
 
 }

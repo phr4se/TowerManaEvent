@@ -5,6 +5,7 @@ import phrase.towerManaEvent.action.context.Context;
 import phrase.towerManaEvent.action.context.impl.SoundContext;
 import phrase.towerManaEvent.action.context.impl.StringContext;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -16,17 +17,17 @@ public class ActionExecutor {
     );
 
 
-    public static void execute(Player player, Map<ActionType, String> map) {
+    public static void execute(Player player, Map<ActionType, List<String>> map) {
 
         map.entrySet().forEach(entry -> {
 
             ActionType actionType = entry.getKey();
-            String message = entry.getValue();
+            List<String> messages = entry.getValue();
 
             Action<Context> action = actionType.getAction();
 
             Function<String, ? extends Context> function = VALIDATORS.get(actionType.getClazz());
-            action.execute(player, function.apply(message));
+            messages.forEach(message -> action.execute(player, function.apply(message)));
 
         });
 

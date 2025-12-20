@@ -1,5 +1,6 @@
 package phrase.towerManaEvent.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +11,9 @@ public class ActionTransformer {
 
     private static final Pattern PATTERN = Pattern.compile("\\[(\\S+)] ?(.*)");
 
-    public static Map<ActionType, String> transform(List<String> settings) {
+    public static Map<ActionType, List<String>> transform(List<String> settings) {
 
-        Map<ActionType, String> map = new HashMap<>();
+        Map<ActionType, List<String>> map = new HashMap<>();
 
         for(String setting : settings) {
 
@@ -28,7 +29,18 @@ public class ActionTransformer {
 
             }
 
-            if(actionType != null && string != null) map.put(actionType, string);
+            if(actionType != null && string != null) {
+                String finalString = string;
+                map.compute(actionType, (k, v) -> {
+                    if(v == null || v.isEmpty()) {
+                        List<String> strings = new ArrayList<>();
+                        strings.add(finalString);
+                        return strings;
+                    }
+                    v.add(finalString);
+                    return v;
+                });
+            }
 
         }
 

@@ -51,7 +51,8 @@ class DecentHologramsService implements HologramService {
         EventManager eventManager = plugin.getEventManager();
         return message.replace("%mana%", String.valueOf(loot.getMana()))
                 .replace("%stage%", String.valueOf(eventManager.getStage().getId()))
-                .replace("%ability%", (eventManager.getStage().getLatestUsedAbility() != null) ? eventManager.getStage().getLatestUsedAbility().getName() : "-");
+                .replace("%ability%", (eventManager.getStage().getLatestUsedAbility() != null) ? eventManager.getStage().getLatestUsedAbility().getName() : "-")
+                .replace("%status%", (eventManager.getStage().isOpenChest()) ? "открыт" : "закрыт");
     }
 
     private List<String> getReplacedLines(Loot loot) {

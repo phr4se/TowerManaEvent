@@ -8,27 +8,33 @@ settings:
       pvp: false
       duration: 120
       available-abilities:
-        - "SPLASH_PUNCH"
+        - "SPIDER_WEB"
+        - "FIREBALL"
       open-chest: false
     two:
       pvp: false
       duration: 120
       available-abilities:
+        - "SPIDER_WEB"
         - "FIREBALL"
+        - "SPLASH_PUNCH"
       open-chest: false
     three:
       pvp: true
       duration: 120
       available-abilities:
+        - "SPIDER_WEB"
+        - "FIREBALL"
+        - "SPLASH_PUNCH"
         - "HORSE"
       open-chest: true
-  use-abilities: 120 # В тиках
+  use-abilities: 120
   abilities:
     - "FIREBALL;50"
     - "HORSE;50"
     - "SPIDER_WEB;50"
     - "SPLASH_PUNCH;50"
-  mana: 100000
+  mana: 1000
   chests:
     1:
       offset-x: 5
@@ -73,38 +79,31 @@ settings:
       radius-search-players: 10
       later-back: 1
       later-back-particle: 0
+  type: "Essentials"
   hologram-provider: "DECENT_HOLOGRAMS"
   hologram-lines:
     - ""
-    - "&bМана: &f%mana%"
-    - "&dСтадия: &f%stage%"
-    - "&fПоследняя способность: &6%ability%"
+    - "&b⚡ &fМана: &b%mana%"
+    - "&e⭐ &fПоследняя использованная способность: &e%ability%"
+    - "&d⚓ &fСундук &d%status%"
     - ""
-  chances:
-    1:
-      material: DIAMOND_SWORD
-      chance: 50.0
-      # enchantments:
-        # - Зачарование;Уровень
-  actions-start-event:
-    - ""
-    - "[broadcast] &fИвент запущен &6%x% %y% %z%"
-    - ""
-  actions-end-event:
-    - ""
-    - "[broadcast] &fИвент окончен"
-    - ""
-  bar-message: "&fКоординаты &6%x% %y% %z% &8| &fСтадия &6%stage% &8| &fОкончание стадии &6%remaining% &8| &fПвп &6%pvp%"
+  bar-message: "&fКоординаты: &6%x% %y% %z% &8| &fСтадия: &6%stage% &8| &fСтадия закончится через: &6%remaining% &8| &fПвп-режим: &6%pvp%"
   bar-color: "YELLOW"
   bar-style: "SEGMENTED_12"
-  # bar-flags:
-    # - Флаг
-  plus-mana: 10
-  actions-switch-stage:
-    - ""
-    - "[broadcast] &fСтадия переключена"
-    - ""
-  type: "Essentials"
+  plus-mana: 100
+  plus-mana-stage: 1000
   region-flags:
     - "BUILD: DENY"
-  plus-mana-stage: 100
+  actions-start-event:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fИвент запущен"
+    - "[broadcast] &6║ &fКоординаты: &6%x% %y% %z%"
+    - "[broadcast] &6╚"
+  actions-end-event:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fИвент остановлен"
+    - "[broadcast] &6╚"
+  actions-switch-stage:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fСтадия переключена"
+    - "[broadcast] &6╚"
