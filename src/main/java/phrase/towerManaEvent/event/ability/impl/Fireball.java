@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Fireball extends Ability {
-
     private final Location location;
     private final int x;
     private final int y;
@@ -50,64 +49,46 @@ public class Fireball extends Ability {
 
     @Override
     public void use(Loot chest) {
-
-        if(chest.getMana() < mana) return;
-
+        if (chest.getMana() < mana) return;
         chest.subtractMana(mana);
-
         Set<Player> players = location.getNearbyEntities(x, y, z).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).collect(Collectors.toSet());
-        if(players.isEmpty()) return;
+        if (players.isEmpty()) return;
         int fireballForPlayer = (int) Math.ceil((double) countFireball / players.size());
         for (Player player : players) {
             Location fireballLocation1 = location.clone().add(0, boostY, 0);
-
             World world = fireballLocation1.getWorld();
-
             Location fireballLocation2 = location.clone().add(offsetLocationX, 0, offsetLocationZ);
-
             for (int i = 0; i < fireballForPlayer / 2; i++) {
-
                 Location offsetFireballLocation1 = fireballLocation1.add(offsetX, offsetY, offsetZ);
                 org.bukkit.entity.Fireball fireball1 = (org.bukkit.entity.Fireball) world.spawnEntity(offsetFireballLocation1, EntityType.FIREBALL);
-
                 Location offsetFireballLocation2 = fireballLocation2.add(offsetX, offsetY, offsetZ);
                 org.bukkit.entity.Fireball fireball2 = (org.bukkit.entity.Fireball) world.spawnEntity(offsetFireballLocation2, EntityType.FIREBALL);
-
                 fireball1.getPersistentDataContainer().set(NamespacedKey.fromString("boss_abilities_fireball"), PersistentDataType.DOUBLE, damage);
                 fireball2.getPersistentDataContainer().set(NamespacedKey.fromString("boss_abilities_fireball"), PersistentDataType.DOUBLE, damage);
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-
                         if (fireball1.isDead() && fireball2.isDead()) {
                             cancel();
                             return;
                         }
-
                         if (!fireball1.isDead() && !fireball2.isDead()) {
                             Vector fireballVector1 = player.getEyeLocation().toVector().subtract(fireball1.getLocation().toVector()).normalize().multiply(speed);
                             fireball1.setDirection(fireballVector1);
-
                             Vector fireballVector2 = player.getEyeLocation().toVector().subtract(fireball2.getLocation().toVector()).normalize().multiply(speed);
                             fireball2.setDirection(fireballVector2);
                         }
-
                         if (!fireball1.isDead()) {
                             Vector fireballVector1 = player.getEyeLocation().toVector().subtract(fireball1.getLocation().toVector()).normalize().multiply(speed);
                             fireball1.setDirection(fireballVector1);
                         }
-
                         if (!fireball2.isDead()) {
                             Vector fireballVector2 = player.getEyeLocation().toVector().subtract(fireball2.getLocation().toVector()).normalize().multiply(speed);
                             fireball2.setDirection(fireballVector2);
                         }
-
                     }
                 }.runTaskTimer(plugin, 0L, 1L);
             }
         }
-
     }
-
 }

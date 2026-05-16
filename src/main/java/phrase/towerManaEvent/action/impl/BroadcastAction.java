@@ -7,10 +7,8 @@ import phrase.towerManaEvent.action.context.impl.StringContext;
 import phrase.towerManaEvent.util.Utils;
 
 public class BroadcastAction implements Action<StringContext> {
-
     @Override
     public void execute(Player player, StringContext context) {
         Bukkit.getServer().getOnlinePlayers().forEach(target -> Utils.sendMessage(target, context.message()));
     }
-
 }

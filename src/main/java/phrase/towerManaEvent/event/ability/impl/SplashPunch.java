@@ -9,7 +9,6 @@ import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.Loot;
 
 public class SplashPunch extends Ability {
-
     private final int count;
     private final long laterCount;
     private final int radius;
@@ -47,119 +46,72 @@ public class SplashPunch extends Ability {
 
     @Override
     public void use(Loot chest) {
-
-        if(chest.getMana() < mana) return;
-
+        if (chest.getMana() < mana) return;
         chest.subtractMana(mana);
-
         for (int i = 1; i <= count; i++) {
-
             long delayCount = (i - 1) * laterCount;
-
             new BukkitRunnable() {
-
                 @Override
                 public void run() {
-
                     for (int j = 1; j <= radius; j += stepRadius) {
-
                         final int currentRadius = j;
-
                         long delayForward = (j - 1) * laterForward;
-
                         new BukkitRunnable() {
-
                             @Override
                             public void run() {
-
                                 for (int k = 1; k <= particleCount; k++) {
-
                                     int currentParticle = k;
-
                                     long delayForwardParticle = (k - 1) * laterForwardParticle;
-
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
                                             double angle = currentParticle * step;
                                             double xParticle = currentRadius * Math.cos(angle);
                                             double zParticle = currentRadius * Math.sin(angle);
-
                                             Location particleLocation = location.clone().add(xParticle, 0, zParticle);
-
                                             particleLocation.getNearbyEntities(x, y, z).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).forEach(player -> {
-
                                                 player.damage(damage);
-
                                             });
-
                                             location.getWorld().spawnParticle(Particle.SWEEP_ATTACK, particleLocation, 1);
-
                                         }
                                     }.runTaskLater(plugin, delayForwardParticle);
-
                                 }
-
                             }
-
                         }.runTaskLater(plugin, delayForward);
-
-
                     }
-
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             for (int j = radius; j >= 1; j -= stepRadius) {
-
                                 final int currentRadius = j;
-
                                 long delayBack = (radius - j) * laterBack;
-
                                 new BukkitRunnable() {
-
                                     @Override
                                     public void run() {
-
                                         for (int k = 1; k <= particleCount; k++) {
-
                                             long delayBackParticle = (k - 1) * laterBackParticle;
-
                                             int currentParticle = k;
-
                                             new BukkitRunnable() {
                                                 @Override
                                                 public void run() {
                                                     double angle = currentParticle * step;
                                                     double xParticle = currentRadius * Math.cos(angle);
                                                     double zParticle = currentRadius * Math.sin(angle);
-
                                                     Location particleLocation = location.clone().add(xParticle, 0, zParticle);
-
                                                     particleLocation.getNearbyEntities(x, y, z).stream().filter(entity -> entity instanceof Player).map(entity -> (Player) entity).forEach(player -> {
                                                         player.damage(damage);
                                                     });
-
                                                     location.getWorld().spawnParticle(Particle.SWEEP_ATTACK, particleLocation, 1);
                                                 }
                                             }.runTaskLater(plugin, delayBackParticle);
-
                                         }
                                     }
                                 }.runTaskLater(plugin, delayBack);
-
-
                             }
                         }
                     }.runTaskLater(plugin, ((radius - 1) * laterForward + (particleCount - 1) * laterForwardParticle));
-
-
                 }
-
             }.runTaskLater(plugin, delayCount);
-
         }
-
     }
-
 }

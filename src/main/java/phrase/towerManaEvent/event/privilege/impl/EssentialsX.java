@@ -6,10 +6,8 @@ import phrase.towerManaEvent.Plugin;
 import phrase.towerManaEvent.event.privilege.Privilege;
 import phrase.towerManaEvent.event.privilege.PrivilegeChecker;
 import phrase.towerManaEvent.event.privilege.PrivilegeDisabler;
-import phrase.towerManaEvent.event.privilege.PrivilegeType;
 
 public class EssentialsX implements Privilege {
-
     private Essentials essentials;
 
     public EssentialsX(Plugin plugin) {
@@ -106,5 +104,4 @@ public class EssentialsX implements Privilege {
     public PrivilegeDisabler vanishDisabler() {
         return vanishDisabler;
     }
-
 }

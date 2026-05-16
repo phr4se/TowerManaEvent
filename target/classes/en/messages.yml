@@ -1,0 +1,17 @@
+messages:
+  prefix: "[TowerManaEvent]"
+  no-permission: "&cYou don't have permission"
+  unknown-command: "&cCommand not found"
+  error: "&cNo command handler found"
+  incorrect-arguments: "&cInvalid arguments provided"
+  not-a-player: "&cYou are not a player"
+
+  command:
+    event-already-run: "&fThe event is already running"
+    schematic-damaged: "&cThe schematic is damaged"
+    schematic-not-exist: "&cThe schematic does not exist"
+    event-run: "&fEvent started"
+    manual:
+      - "&fBefore editing the drop rates of new items, you must &asave them!"
+      - "&fTo &asave &fitems, place them in your inventory and close it."
+      - "&fTo edit drop rates, use &6left‑click &fand &cright‑click."

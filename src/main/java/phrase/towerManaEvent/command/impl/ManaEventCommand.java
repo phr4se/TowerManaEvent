@@ -11,7 +11,6 @@ import phrase.towerManaEvent.event.exception.SchematicNotExist;
 import phrase.towerManaEvent.util.Utils;
 
 public class ManaEventCommand implements CommandHandler {
-
     private final Plugin plugin;
 
     public ManaEventCommand(Plugin plugin) {
@@ -20,13 +19,9 @@ public class ManaEventCommand implements CommandHandler {
 
     @Override
     public boolean handler(Player player, String[] args) {
-
-        if(args.length < 2) return false;
-
+        if (args.length < 2) return false;
         CommandMessages commandMessages = plugin.getConfigFile().getCommandMessages();
-
         EventManager eventManager = plugin.getEventManager();
-
         try {
             eventManager.startEvent();
             Utils.sendMessage(player, commandMessages.eventRun());
@@ -37,8 +32,6 @@ public class ManaEventCommand implements CommandHandler {
         } catch (SchematicNotExist e) {
             Utils.sendMessage(player, commandMessages.schematicNotExist());
         }
-
         return true;
     }
-
 }

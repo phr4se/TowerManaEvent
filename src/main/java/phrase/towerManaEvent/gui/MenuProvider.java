@@ -2,10 +2,8 @@ package phrase.towerManaEvent.gui;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import phrase.towerManaEvent.Plugin;
 
 public abstract class MenuProvider {
-
     private final MenuService menuService;
 
     public MenuProvider(MenuService menuService) {
@@ -17,5 +15,4 @@ public abstract class MenuProvider {
     }
 
     public abstract Inventory getMenu(Player player);
-
 }

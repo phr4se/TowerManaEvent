@@ -1,6 +1,5 @@
 package phrase.towerManaEvent.event.stage.impl;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -9,12 +8,10 @@ import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.event.stage.Stage;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class StageImpl extends Stage {
-
     private final List<AbilityType> availableAbilities;
 
     public StageImpl(int id, boolean pvp, int duration, Plugin plugin, List<AbilityType> availableAbilities, boolean openChest) {
@@ -27,27 +24,20 @@ public class StageImpl extends Stage {
         startTask();
         EventManager eventManager = plugin.getEventManager();
         eventManager.setPvp(pvp);
-        if(openChest) {
+        if (openChest) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-
                     eventManager.getLoots().forEach((key, value) -> {
                         Inventory inventory = value.getInventory();
-
                         Random random = new Random();
                         ItemStack[] contents = plugin.getLootManager().getRandomLoots(101);
-                        for(ItemStack itemStack : contents) {
-                            boolean freeSlot = Arrays.stream(contents).filter(content -> content.getType() == Material.AIR).toList().isEmpty();
-                            if(freeSlot) {
-                                int randomSlot = random.nextInt(inventory.getSize());
-                                while (inventory.getItem(randomSlot) != null)
-                                    randomSlot = random.nextInt(inventory.getSize());
-                                inventory.setItem(randomSlot, itemStack);
-                            } else break;
+                        for (ItemStack itemStack : contents) {
+                            int randomSlot = random.nextInt(inventory.getSize());
+                            inventory.setItem(randomSlot, itemStack);
+                            ;
                         }
                     });
-
                 }
             }.runTask(plugin);
         }
@@ -59,21 +49,16 @@ public class StageImpl extends Stage {
     }
 
     private void startTask() {
-
         new BukkitRunnable() {
             @Override
             public void run() {
-
-                if(remained == 0) {
+                if (remained == 0) {
                     cancel();
                     plugin.getEventManager().switchStage();
                 } else {
-                    if(remained > 0) remained--;
+                    if (remained > 0) remained--;
                 }
-
             }
         }.runTaskTimerAsynchronously(plugin, 0L, 20L);
-
     }
-
 }

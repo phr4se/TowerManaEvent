@@ -8,12 +8,10 @@ import phrase.towerManaEvent.action.impl.MessageAction;
 import phrase.towerManaEvent.action.impl.SoundAction;
 
 public enum ActionType {
-
     CONSOLE(new ConsoleAction(), StringContext.class),
     MESSAGE(new MessageAction(), StringContext.class),
     BROADCAST(new BroadcastAction(), StringContext.class),
     SOUND(new SoundAction(), SoundAction.class);
-
     private final Action<?> action;
     private final Class<?> clazz;
 
@@ -29,5 +27,4 @@ public enum ActionType {
     public Class<?> getClazz() {
         return clazz;
     }
-
 }

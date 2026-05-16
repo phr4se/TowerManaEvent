@@ -6,10 +6,8 @@ import phrase.towerManaEvent.action.Action;
 import phrase.towerManaEvent.action.context.impl.StringContext;
 
 public class ConsoleAction implements Action<StringContext> {
-
     @Override
     public void execute(Player player, StringContext context) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), context.message());
     }
-
 }

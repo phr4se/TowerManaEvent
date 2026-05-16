@@ -7,13 +7,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import java.util.List;
 
 public class RegionFlag {
-
     public static void setRegionFlags(ProtectedCuboidRegion region, List<String> strings) {
-
-        for(String string : strings) {
-
+        for (String string : strings) {
             String[] flag = string.split(": ");
-
             switch (flag[0].toLowerCase()) {
                 case "build" -> region.setFlag(Flags.BUILD, StateFlag.State.valueOf(flag[1]));
                 case "pvp" -> region.setFlag(Flags.PVP, StateFlag.State.valueOf(flag[1]));
@@ -29,9 +25,6 @@ public class RegionFlag {
                 case "pistons" -> region.setFlag(Flags.PISTONS, StateFlag.State.valueOf(flag[1]));
                 case "potion-splash" -> region.setFlag(Flags.POTION_SPLASH, StateFlag.State.valueOf(flag[1]));
             }
-
         }
-
     }
-
 }

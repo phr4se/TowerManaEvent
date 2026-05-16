@@ -21,12 +21,12 @@ import phrase.towerManaEvent.listener.ManaListener;
 import phrase.towerManaEvent.listener.PlayerListener;
 import phrase.towerManaEvent.event.stage.StageManager;
 import phrase.towerManaEvent.util.Utils;
+import phrase.towerManaEvent.util.colorizer.ColorizerFactory;
 
 public final class Plugin extends JavaPlugin implements CommandExecutor {
-
     private final CommandLogger commandLogger = new CommandLogger(this);
     private final CommandMapper commandMapper = new CommandMapper(commandLogger, this);
-    private final Config config = new Config(this);;
+    private final Config config = new Config(this);
     private final StageManager stageManager = new StageManager(this);
     private final MenuManager menuManager = new MenuManager(this);
     private HologramProvider hologramProvider;
@@ -36,26 +36,23 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
-
         config.createFiles("messages.yml", "menus/menu-chances.yml", "chances.yml");
-
         saveDefaultConfig();
-
         config.setupSettings();
+        Utils.colorizer = ColorizerFactory.getProvider(config.getSettings().colorizerType());
+        config.setLanguage(config.getDefaultFile("choose-language.yml"));
         config.setupMessages();
+        config.setupOther();
         config.setupAbilitiesSettings();
-
         lootManager = new LootManager(config.getSettings().chances(), config.getSettings().items());
         hologramProvider = HologramFactory.getHologramProvider(config.getSettings().hologramType(), this);
         privilegeManager = new PrivilegeManager();
-        privilegeManager.setPrivilege(config.getSettings().type(),this);
+        privilegeManager.setPrivilege(config.getSettings().type(), this);
         eventManager = new EventManager(this);
-
         getCommand("mana").setExecutor(this);
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new PlayerListener(this), this);
         pluginManager.registerEvents(new ManaListener(this), this);
-
     }
 
     @Override
@@ -64,26 +61,15 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-        if(sender instanceof Player player) {
-
-            if(args.length == 0) return true;
-
+        if (sender instanceof Player player) {
+            if (args.length == 0) return true;
             CommandResult commandResult = commandMapper.mapCommand(player, args[0], args);
-
-            if(commandResult.getResultType() != CommandResult.ResultStatus.SUCCESS) {
-
-                if(commandResult.getMessage() != null) {
-
+            if (commandResult.getResultType() != CommandResult.ResultStatus.SUCCESS) {
+                if (commandResult.getMessage() != null) {
                     Utils.sendMessage(player, commandResult.getMessage());
-
                 }
-
             }
-
         } else Utils.sendMessage(sender, config.getMessages().notAPlayer());
-
-
         return true;
     }
 
@@ -114,5 +100,4 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
     public MenuManager getMenuManager() {
         return menuManager;
     }
-
 }

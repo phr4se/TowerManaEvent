@@ -6,9 +6,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class CloseMenuChancesEvent extends Event {
-
     private static final HandlerList HANDLERS = new HandlerList();
-
     private final Inventory inventory;
 
     public CloseMenuChancesEvent(Inventory inventory) {
@@ -27,5 +25,4 @@ public class CloseMenuChancesEvent extends Event {
     public Inventory getInventory() {
         return inventory;
     }
-
 }

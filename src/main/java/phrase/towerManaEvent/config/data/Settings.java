@@ -7,9 +7,15 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.inventory.ItemStack;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.hologram.HologramType;
+import phrase.towerManaEvent.util.colorizer.ColorizerType;
 
 import java.util.List;
 import java.util.Map;
 
-public record Settings(HologramType hologramType, World world, int coordinateRangeX, int coordinateRangeZ, String schematicName, long useAbilities, Map<AbilityType, Integer> abilities, int mana, List<String> hologramLines, Map<String, Double> chances, List<String> actionsStartEvent, List<String> actionsEndEvent, String barMessage, BarColor barColor, BarStyle barStyle, BarFlag[] barFlags, int plusMana, List<String> actionsSwitchStage, String type, List<String> regionFlagsName, int plusManaStage, Map<String, ItemStack> items) {
+public record Settings(ColorizerType colorizerType, HologramType hologramType, World world, int coordinateRangeX,
+                       int coordinateRangeZ,
+                       String schematicName, long useAbilities, Map<AbilityType, Integer> abilities, int mana,
+                       Map<String, Double> chances, BarColor barColor, BarStyle barStyle,
+                       BarFlag[] barFlags, int plusMana, String type,
+                       List<String> regionFlagsName, int plusManaStage, Map<String, ItemStack> items) {
 }

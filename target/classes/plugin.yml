@@ -1,5 +1,5 @@
 name: TowerManaEvent
-version: '1.0'
+version: '1.4'
 main: phrase.towerManaEvent.Plugin
 api-version: '1.18'
 commands:

@@ -1,0 +1,6 @@
+menu:
+  size: 54
+  title: "Chances"
+  add-lore:
+    - "&6Left‑click +10 to chance &8| &cRight‑click -10 to chance"
+    - "&fChance: &6%chance%"

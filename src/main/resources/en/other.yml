@@ -1,0 +1,20 @@
+actions-start-event:
+  - "[broadcast] &6╔"
+  - "[broadcast] &6║ &fEvent started"
+  - "[broadcast] &6║ &fCoordinates: &6%x% %y% %z%"
+  - "[broadcast] &6╚"
+actions-end-event:
+  - "[broadcast] &6╔"
+  - "[broadcast] &6║ &fEvent stopped"
+  - "[broadcast] &6╚"
+actions-switch-stage:
+  - "[broadcast] &6╔"
+  - "[broadcast] &6║ &fStage switched"
+  - "[broadcast] &6╚"
+hologram-lines:
+  - ""
+  - "&b⚡ &fMana: &b%mana%"
+  - "&e⭐ &fLast used ability: &e%ability%"
+  - "&d⚓ &fChest &d%status%"
+  - ""
+bar-message: "&fCoordinates: &6%x% %y% %z% &8| &fStage: &6%stage% &8| &fStage ends in: &6%remaining% &8| &fPvP mode: &6%pvp%"

@@ -5,6 +5,7 @@ phrase\towerManaEvent\action\impl\BroadcastAction.class
 phrase\towerManaEvent\event\LootManager.class
 phrase\towerManaEvent\event\exception\EventAlreadyRun.class
 phrase\towerManaEvent\event\ability\impl\Fireball.class
+phrase\towerManaEvent\util\colorizer\impl\MiniMessageProvider.class
 phrase\towerManaEvent\hologram\HologramFactory.class
 phrase\towerManaEvent\command\CommandResult$ResultStatus.class
 phrase\towerManaEvent\config\data\SplashPunchSettings.class
@@ -20,6 +21,7 @@ phrase\towerManaEvent\event\RegionFlag.class
 phrase\towerManaEvent\event\EventManager$2$1.class
 phrase\towerManaEvent\hologram\impl\DecentHologramsService$1.class
 phrase\towerManaEvent\event\Loot.class
+phrase\towerManaEvent\util\colorizer\impl\MiniMessageService.class
 phrase\towerManaEvent\action\ActionTransformer.class
 phrase\towerManaEvent\event\EventManager$1.class
 phrase\towerManaEvent\gui\impl\MenuChancesProvider.class
@@ -29,7 +31,6 @@ phrase\towerManaEvent\event\stage\StageType.class
 phrase\towerManaEvent\command\CommandLogger.class
 phrase\towerManaEvent\event\ability\impl\Horse$1.class
 phrase\towerManaEvent\event\stage\impl\StageImpl$1.class
-phrase\towerManaEvent\util\colorizer\ColorizerSerivce.class
 phrase\towerManaEvent\event\ability\impl\SplashPunch$1$2.class
 phrase\towerManaEvent\event\ability\impl\SplashPunch.class
 phrase\towerManaEvent\event\privilege\PrivilegeType.class
@@ -65,10 +66,12 @@ phrase\towerManaEvent\hologram\impl\DecentHologramsService.class
 phrase\towerManaEvent\command\impl\ManaChancesCommand.class
 phrase\towerManaEvent\action\context\Context.class
 phrase\towerManaEvent\action\impl\SoundAction.class
+phrase\towerManaEvent\config\data\Other.class
 phrase\towerManaEvent\config\data\Messages.class
 phrase\towerManaEvent\listener\PlayerListener.class
 phrase\towerManaEvent\command\CommandDescription.class
 phrase\towerManaEvent\action\Action.class
+phrase\towerManaEvent\util\colorizer\ColorizerService.class
 phrase\towerManaEvent\util\colorizer\ColorizerFactory$1.class
 phrase\towerManaEvent\event\EventManager$1$1$1$1.class
 phrase\towerManaEvent\config\data\SpiderWebSettings.class
@@ -97,6 +100,7 @@ phrase\towerManaEvent\Plugin.class
 phrase\towerManaEvent\event\EventManager$5.class
 phrase\towerManaEvent\event\exception\SchematicNotExist.class
 phrase\towerManaEvent\util\colorizer\ColorizerProvider.class
+phrase\towerManaEvent\config\Config$Language.class
 phrase\towerManaEvent\hologram\impl\DecentHologramsProvider.class
 phrase\towerManaEvent\event\privilege\impl\Vanilla.class
 phrase\towerManaEvent\action\context\impl\SoundContext.class

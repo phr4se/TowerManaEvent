@@ -23,6 +23,7 @@ C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phras
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\FireballSettings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\HorseSettings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Messages.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Other.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Settings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\SpiderWebSettings.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\SplashPunchSettings.java
@@ -69,8 +70,10 @@ C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phras
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\Plugin.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\ColorizerFactory.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\ColorizerProvider.java
-C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\ColorizerSerivce.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\ColorizerService.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\ColorizerType.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\HexProvider.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\HexService.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\MiniMessageProvider.java
+C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\MiniMessageService.java
 C:\Users\Вениамин Phrase\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\Utils.java

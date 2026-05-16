@@ -8,11 +8,9 @@ import phrase.towerManaEvent.event.stage.impl.StageImpl;
 import java.util.stream.Collectors;
 
 public enum StageType {
-
     ONE,
     TWO,
     THREE;
-
     private Stage stage;
 
     public void setStage(Stage stage) {
@@ -24,9 +22,7 @@ public enum StageType {
     }
 
     public void initialize(Plugin plugin) {
-
         final ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.stages");
-
         switch (this) {
             case ONE -> {
                 final ConfigurationSection configurationSectionOne = configurationSection.getConfigurationSection("one");
@@ -57,7 +53,5 @@ public enum StageType {
                         configurationSectionThree.getBoolean("open-chest")));
             }
         }
-
     }
-
 }

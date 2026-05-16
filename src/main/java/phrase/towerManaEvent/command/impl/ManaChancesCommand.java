@@ -7,7 +7,6 @@ import phrase.towerManaEvent.gui.MenuType;
 import phrase.towerManaEvent.util.Utils;
 
 public class ManaChancesCommand implements CommandHandler {
-
     private final Plugin plugin;
 
     public ManaChancesCommand(Plugin plugin) {
@@ -20,5 +19,4 @@ public class ManaChancesCommand implements CommandHandler {
         plugin.getConfigFile().getCommandMessages().manual().forEach(message -> Utils.sendMessage(player, message));
         return true;
     }
-
 }

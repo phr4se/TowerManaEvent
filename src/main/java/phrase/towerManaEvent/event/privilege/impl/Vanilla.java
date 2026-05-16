@@ -7,7 +7,6 @@ import phrase.towerManaEvent.event.privilege.PrivilegeDisabler;
 import phrase.towerManaEvent.event.privilege.PrivilegeType;
 
 public class Vanilla implements Privilege {
-
     @Override
     public void initialize() {
         setupFlyChecker();
@@ -16,7 +15,7 @@ public class Vanilla implements Privilege {
         setupGodDisabler();
         setupVanishChecker();
         setupVanishDisabler();
-        for(PrivilegeType privilegeType : PrivilegeType.values()) privilegeType.initialize(this);
+        for (PrivilegeType privilegeType : PrivilegeType.values()) privilegeType.initialize(this);
     }
 
     private PrivilegeChecker flyChecker;
@@ -89,5 +88,4 @@ public class Vanilla implements Privilege {
     public PrivilegeDisabler vanishDisabler() {
         return vanishDisabler;
     }
-
 }

@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Horse extends Ability {
-
     private final Location location;
     private final int distance;
     private final int num1;
@@ -43,62 +42,39 @@ public class Horse extends Ability {
 
     @Override
     public void use(Loot chest) {
-
         if (chest.getMana() < mana) return;
-
         chest.subtractMana(mana);
-
-
         Vector perpendicular = new Vector(-location.getDirection().getZ(), 0, location.getDirection().getX());
-
         Map<Location, SkeletonHorse> skeletonHorses = new HashMap<>();
-
         for (int i = num1; i < num2; i++) {
-
             double offsetFromCenter = i * distance;
-
             Location offsetLocation = location.clone().add(perpendicular.clone().multiply(offsetFromCenter));
-
             long yValue = (long) offsetLocation.getY();
-
             if (offsetLocation.getY() != (double) yValue) {
                 offsetLocation.setY((int) Math.floor(offsetLocation.getY()));
             }
-
             while ((offsetLocation.clone().add(0, -1, 0).getBlock().getType()) == Material.AIR)
                 offsetLocation.add(0, -1, 0);
-
             SkeletonHorse skeletonHorse = location.getWorld().spawn(offsetLocation, SkeletonHorse.class);
-
             skeletonHorse.getPersistentDataContainer().set(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING, "towermanaevent_skeleton_horse");
             skeletonHorse.setGliding(false);
             Location finishPosition = offsetLocation.add(location.getDirection().multiply(forwardBlocks));
             skeletonHorses.put(finishPosition, skeletonHorse);
-
         }
-
         new BukkitRunnable() {
-
             @Override
             public void run() {
-
                 skeletonHorses.entrySet().forEach(entry -> {
                     Location finishPosition = entry.getKey();
                     SkeletonHorse skeletonHorse = entry.getValue();
                     Location startPosition = skeletonHorse.getLocation();
-
-
                     for (Entity entity : startPosition.getNearbyEntities(1, 1, 1)) {
                         if (entity instanceof Player player) {
-
                             player.setVelocity(player.getLocation().getDirection().normalize().multiply(-knockbackBlocks));
                             player.damage(damage);
-
                         }
                     }
-
                     double toMoveX = 0, toMoveY = 0, toMoveZ = 0;
-
                     if (Math.abs(startPosition.getX() - finishPosition.getX()) > 0.2) {
                         if (startPosition.getX() > finishPosition.getX()) {
                             toMoveX = -speed;
@@ -106,7 +82,6 @@ public class Horse extends Ability {
                             toMoveX = speed;
                         }
                     }
-
                     if (Math.abs(startPosition.getY() - finishPosition.getY()) >= 1.0) {
                         if (startPosition.getY() > finishPosition.getY()) {
                             toMoveY = -1.0;
@@ -114,7 +89,6 @@ public class Horse extends Ability {
                             toMoveY = 1.0;
                         }
                     }
-
                     if (Math.abs(startPosition.getZ() - finishPosition.getZ()) > 0.2) {
                         if (startPosition.getZ() > finishPosition.getZ()) {
                             toMoveZ = -speed;
@@ -122,10 +96,8 @@ public class Horse extends Ability {
                             toMoveZ = speed;
                         }
                     }
-
                     skeletonHorse.setVelocity(new Vector(toMoveX, toMoveY, toMoveZ));
                 });
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -136,11 +108,7 @@ public class Horse extends Ability {
                         skeletonHorses.clear();
                     }
                 }.runTaskLater(plugin, laterDeath);
-
             }
         }.runTaskTimer(plugin, 0L, 1L);
-
-
     }
-
 }

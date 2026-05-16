@@ -3,7 +3,6 @@ package phrase.towerManaEvent.event.ability;
 import phrase.towerManaEvent.event.Loot;
 
 public abstract class Ability {
-
     private final String name;
     protected final int mana;
     protected double damage;
@@ -23,5 +22,4 @@ public abstract class Ability {
     public String getName() {
         return name;
     }
-
 }

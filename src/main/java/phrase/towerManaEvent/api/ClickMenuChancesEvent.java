@@ -9,9 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ClickMenuChancesEvent extends Event implements Cancellable {
-
     private static final HandlerList HANDLERS = new HandlerList();
-
     private final Player player;
     private final InventoryClickEvent event;
 
@@ -37,9 +35,13 @@ public class ClickMenuChancesEvent extends Event implements Cancellable {
         return event.getCurrentItem();
     }
 
-    public boolean isRightClick() { return event.isRightClick(); }
+    public boolean isRightClick() {
+        return event.isRightClick();
+    }
 
-    public boolean isLeftClick() { return event.isLeftClick(); }
+    public boolean isLeftClick() {
+        return event.isLeftClick();
+    }
 
     @Override
     public boolean isCancelled() {
@@ -50,5 +52,4 @@ public class ClickMenuChancesEvent extends Event implements Cancellable {
     public void setCancelled(boolean b) {
         event.setCancelled(b);
     }
-
 }

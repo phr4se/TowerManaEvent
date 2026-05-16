@@ -9,7 +9,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class LootManager {
-
     private final Map<String, Double> chances;
     private final Map<String, ItemStack> items;
 
@@ -35,7 +34,8 @@ public class LootManager {
             ItemStack newItemStack = itemStack.clone();
             ItemMeta itemMeta = newItemStack.getItemMeta();
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-            if(persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING)) persistentDataContainer.remove(NamespacedKey.fromString("towermanaevent_key"));
+            if (persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING))
+                persistentDataContainer.remove(NamespacedKey.fromString("towermanaevent_key"));
             newItemStack.setItemMeta(itemMeta);
             return newItemStack;
         }).toArray(ItemStack[]::new);
@@ -52,5 +52,4 @@ public class LootManager {
     public Map<String, ItemStack> getItems() {
         return Collections.unmodifiableMap(items);
     }
-
 }

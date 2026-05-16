@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataType;
@@ -26,7 +25,6 @@ import phrase.towerManaEvent.event.Loot;
 import phrase.towerManaEvent.event.EventManager;
 
 public class PlayerListener implements Listener {
-
     private final Plugin plugin;
 
     public PlayerListener(Plugin plugin) {
@@ -35,113 +33,71 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-
-        if(event.getWhoClicked() instanceof Player player) {
-
+        if (event.getWhoClicked() instanceof Player player) {
             Inventory inventory = event.getClickedInventory();
-
-            if(inventory == null || inventory.getHolder() == null) return;
-
+            if (inventory == null || inventory.getHolder() == null) return;
             if (inventory.getHolder() instanceof MenuChancesService)
                 pluginManager.callEvent(new ClickMenuChancesEvent(player, event));
-
         }
-
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-
         PluginManager pluginManager = plugin.getServer().getPluginManager();
-
         Inventory inventory = event.getPlayer().getOpenInventory().getTopInventory();
-
         if (inventory.getHolder() instanceof MenuChancesService)
             pluginManager.callEvent(new CloseMenuChancesEvent(inventory));
-
-
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-
         EventManager eventManager = plugin.getEventManager();
-
-        if(!eventManager.isEventRunning()) return;
-
+        if (!eventManager.isEventRunning()) return;
         Loot chest = eventManager.getLoot(event.getBlock().getLocation());
-
-        if(chest != null) event.setCancelled(true);
-
+        if (chest != null) event.setCancelled(true);
     }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-
-        if(event.getEntity() instanceof SkeletonHorse skeletonHorse) {
-
-            if(skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING)) event.getDrops().clear();
-
+        if (event.getEntity() instanceof SkeletonHorse skeletonHorse) {
+            if (skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING))
+                event.getDrops().clear();
         }
-
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-
         EventManager eventManager = plugin.getEventManager();
-
-        if(!eventManager.isEventRunning()) return;
-
-        if(event.getClickedBlock() == null) return;
-
+        if (!eventManager.isEventRunning()) return;
+        if (event.getClickedBlock() == null) return;
         Block block = event.getClickedBlock();
-
         Loot chest = eventManager.getLoot(block.getLocation());
-
         if (chest != null) {
-
-            if(!eventManager.getStage().isOpenChest()) event.setCancelled(true);
-
+            if (!eventManager.getStage().isOpenChest()) event.setCancelled(true);
         }
-
     }
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-
         if (event.getDamager() instanceof Fireball fireball) {
-
             if (fireball.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_fireball"), PersistentDataType.DOUBLE)) {
-
                 double damage = fireball.getPersistentDataContainer().get(NamespacedKey.fromString("towermanaevent_fireball"), PersistentDataType.DOUBLE);
                 event.setDamage(damage);
-
             }
-
         }
-
-        if(event.getDamager() instanceof Player && event.getEntity() instanceof SkeletonHorse skeletonHorse) {
-
-            if(skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING)) event.setCancelled(true);
-
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof SkeletonHorse skeletonHorse) {
+            if (skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING))
+                event.setCancelled(true);
         }
-
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-
         Player player = event.getPlayer();
-
         EventManager eventManager = plugin.getEventManager();
-
-        if(!eventManager.isEventRunning()) return;
-
-        if(eventManager.playerAtEvent(player)) eventManager.getRandomLoot().addMana(plugin.getConfigFile().getSettings().plusMana());
-
+        if (!eventManager.isEventRunning()) return;
+        if (eventManager.playerAtEvent(player))
+            eventManager.getRandomLoot().addMana(plugin.getConfigFile().getSettings().plusMana());
     }
-
 }

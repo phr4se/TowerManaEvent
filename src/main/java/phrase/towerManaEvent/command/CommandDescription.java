@@ -1,7 +1,6 @@
 package phrase.towerManaEvent.command;
 
 public class CommandDescription {
-
     private final String permission;
     private final CommandHandler commandHandler;
 
@@ -17,5 +16,4 @@ public class CommandDescription {
     public CommandHandler getCommandHandler() {
         return commandHandler;
     }
-
 }

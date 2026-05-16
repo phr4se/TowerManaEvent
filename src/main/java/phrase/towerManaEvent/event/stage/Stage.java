@@ -7,7 +7,6 @@ import phrase.towerManaEvent.event.ability.AbilityType;
 import java.util.List;
 
 public abstract class Stage {
-
     private final int id;
     protected final boolean pvp;
     protected final Plugin plugin;
@@ -26,7 +25,6 @@ public abstract class Stage {
     }
 
     public abstract void setup();
-
     public abstract List<AbilityType> getAvailableAbilities();
 
     public int getId() {

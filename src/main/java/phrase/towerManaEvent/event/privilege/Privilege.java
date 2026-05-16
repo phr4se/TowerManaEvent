@@ -1,7 +1,6 @@
 package phrase.towerManaEvent.event.privilege;
 
 public interface Privilege {
-
     void initialize();
     PrivilegeChecker flyChecker();
     PrivilegeDisabler flyDisabler();
@@ -9,5 +8,4 @@ public interface Privilege {
     PrivilegeDisabler godDisabler();
     PrivilegeChecker vanishChecker();
     PrivilegeDisabler vanishDisabler();
-
 }

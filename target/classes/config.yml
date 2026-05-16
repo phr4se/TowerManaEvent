@@ -1,4 +1,5 @@
 settings:
+  colorizer-type: HEX
   world-name: "world"
   coordinate-range-x: 1000
   coordinate-range-z: 1000
@@ -10,7 +11,7 @@ settings:
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
-      open-chest: false
+      open-chest: true
     two:
       pvp: false
       duration: 120
@@ -18,7 +19,7 @@ settings:
         - "SPIDER_WEB"
         - "FIREBALL"
         - "SPLASH_PUNCH"
-      open-chest: false
+      open-chest: true
     three:
       pvp: true
       duration: 120
@@ -81,29 +82,9 @@ settings:
       later-back-particle: 0
   type: "Essentials"
   hologram-provider: "DECENT_HOLOGRAMS"
-  hologram-lines:
-    - ""
-    - "&b⚡ &fМана: &b%mana%"
-    - "&e⭐ &fПоследняя использованная способность: &e%ability%"
-    - "&d⚓ &fСундук &d%status%"
-    - ""
-  bar-message: "&fКоординаты: &6%x% %y% %z% &8| &fСтадия: &6%stage% &8| &fСтадия закончится через: &6%remaining% &8| &fПвп-режим: &6%pvp%"
   bar-color: "YELLOW"
   bar-style: "SEGMENTED_12"
   plus-mana: 100
   plus-mana-stage: 1000
   region-flags:
     - "BUILD: DENY"
-  actions-start-event:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fИвент запущен"
-    - "[broadcast] &6║ &fКоординаты: &6%x% %y% %z%"
-    - "[broadcast] &6╚"
-  actions-end-event:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fИвент остановлен"
-    - "[broadcast] &6╚"
-  actions-switch-stage:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fСтадия переключена"
-    - "[broadcast] &6╚"

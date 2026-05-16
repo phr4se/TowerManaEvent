@@ -10,7 +10,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Loot {
-
     private final UUID uuid;
     private final Inventory inventory;
     private final Location location;
@@ -56,5 +55,4 @@ public class Loot {
     public UUID getUuid() {
         return uuid;
     }
-
 }

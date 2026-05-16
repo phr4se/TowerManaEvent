@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandLogger {
-
     private final Plugin plugin;
     private final Map<String, CommandDescription> commands;
 
@@ -27,5 +26,4 @@ public class CommandLogger {
     public Map<String, CommandDescription> getCommands() {
         return Collections.unmodifiableMap(commands);
     }
-
 }

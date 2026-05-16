@@ -6,7 +6,6 @@ import phrase.towerManaEvent.Plugin;
 import phrase.towerManaEvent.gui.MenuProvider;
 
 public class MenuChancesProvider extends MenuProvider {
-
     public MenuChancesProvider(Plugin plugin) {
         super(new MenuChancesService(plugin));
     }
@@ -15,5 +14,4 @@ public class MenuChancesProvider extends MenuProvider {
     public Inventory getMenu(Player player) {
         return getMenuService().create(player);
     }
-
 }

@@ -1,15 +1,12 @@
 package phrase.towerManaEvent.command;
 
 public class CommandResult {
-
     public enum ResultStatus {
-
         SUCCESS,
         UNKNOWN_COMMAND,
         INCORRECT_ARGUMENTS,
         NO_PERMISSION,
         ERROR
-
     }
 
     private final String message;
@@ -27,5 +24,4 @@ public class CommandResult {
     public ResultStatus getResultType() {
         return resultType;
     }
-
 }

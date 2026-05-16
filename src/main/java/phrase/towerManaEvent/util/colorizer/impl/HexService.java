@@ -1,12 +1,11 @@
 package phrase.towerManaEvent.util.colorizer.impl;
 
-import phrase.towerManaEvent.util.colorizer.ColorizerSerivce;
+import phrase.towerManaEvent.util.colorizer.ColorizerService;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class HexService implements ColorizerSerivce {
-
+class HexService implements ColorizerService {
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([a-fA-F\\d]{6})");
 
     @Override
@@ -35,14 +34,12 @@ class HexService implements ColorizerSerivce {
 
     public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
         final char[] b = textToTranslate.toCharArray();
-
         for (int i = 0, length = b.length - 1; i < length; ++i) {
             if (b[i] == altColorChar && isValidColorCharacter(b[i + 1])) {
                 b[i++] = COLOR_CHAR;
                 b[i] |= 0x20;
             }
         }
-
         return new String(b);
     }
 
@@ -57,5 +54,4 @@ class HexService implements ColorizerSerivce {
                 (c >= 'K' && c <= 'O') ||
                 c == 'X';
     }
-
 }
