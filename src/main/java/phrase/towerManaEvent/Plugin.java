@@ -36,11 +36,11 @@ public final class Plugin extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
-        config.createFiles("messages.yml", "menus/menu-chances.yml", "chances.yml");
+        config.setLanguage(config.getDefaultFile("choose-language.yml"));
+        config.createFiles("messages.yml", "menus/menu-chances.yml", "chances.yml", "other.yml");
         saveDefaultConfig();
         config.setupSettings();
         Utils.colorizer = ColorizerFactory.getProvider(config.getSettings().colorizerType());
-        config.setLanguage(config.getDefaultFile("choose-language.yml"));
         config.setupMessages();
         config.setupOther();
         config.setupAbilitiesSettings();

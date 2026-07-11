@@ -1,20 +1,21 @@
-hologram-lines:
-  - ""
-  - "&b⚡ &fМана: &b%mana%"
-  - "&e⭐ &fПоследняя использованная способность: &e%ability%"
-  - "&d⚓ &fСундук &d%status%"
-  - ""
-bar-message: "&fКоординаты: &6%x% %y% %z% &8| &fСтадия: &6%stage% &8| &fСтадия закончится через: &6%remaining% &8| &fПвп-режим: &6%pvp%"
-actions-start-event:
-  - "[broadcast] &6╔"
-  - "[broadcast] &6║ &fИвент запущен"
-  - "[broadcast] &6║ &fКоординаты: &6%x% %y% %z%"
-  - "[broadcast] &6╚"
-actions-end-event:
-  - "[broadcast] &6╔"
-  - "[broadcast] &6║ &fИвент остановлен"
-  - "[broadcast] &6╚"
-actions-switch-stage:
-  - "[broadcast] &6╔"
-  - "[broadcast] &6║ &fСтадия переключена"
-  - "[broadcast] &6╚"
+other:
+  hologram-lines:
+    - ""
+    - "&b⚡ &fМана: &b%mana%"
+    - "&e⭐ &fПоследняя использованная способность: &e%ability%"
+    - "&d⚓ &fСундук &d%status%"
+    - ""
+  bar-message: "&fКоординаты: &6%x% %y% %z% &8| &fСтадия: &6%stage% &8| &fСтадия закончится через: &6%remaining% &8| &fПвп-режим: &6%pvp%"
+  actions-start-event:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fИвент запущен"
+    - "[broadcast] &6║ &fКоординаты: &6%x% %y% %z%"
+    - "[broadcast] &6╚"
+  actions-end-event:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fИвент остановлен"
+    - "[broadcast] &6╚"
+  actions-switch-stage:
+    - "[broadcast] &6╔"
+    - "[broadcast] &6║ &fСтадия переключена"
+    - "[broadcast] &6╚"
