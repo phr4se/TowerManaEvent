@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.Loot;
 
@@ -28,9 +28,9 @@ public class Fireball extends Ability {
     private final int offsetY;
     private final int offsetZ;
     private final int speed;
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public Fireball(int mana, double damage, Location location, int x, int y, int z, int countFireball, int boostY, int offsetLocationX, int offsetLocationZ, int offsetX, int offsetY, int offsetZ, int speed, Plugin plugin) {
+    public Fireball(int mana, double damage, Location location, int x, int y, int z, int countFireball, int boostY, int offsetLocationX, int offsetLocationZ, int offsetX, int offsetY, int offsetZ, int speed, TowerManaEvent plugin) {
         super("Фаербол", mana, damage);
         this.location = location;
         this.x = x;

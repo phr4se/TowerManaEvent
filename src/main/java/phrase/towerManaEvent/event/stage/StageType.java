@@ -1,7 +1,7 @@
 package phrase.towerManaEvent.event.stage;
 
 import org.bukkit.configuration.ConfigurationSection;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.stage.impl.StageImpl;
 
@@ -21,7 +21,7 @@ public enum StageType {
         return stage;
     }
 
-    public void initialize(Plugin plugin) {
+    public void initialize(TowerManaEvent plugin) {
         final ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.stages");
         switch (this) {
             case ONE -> {

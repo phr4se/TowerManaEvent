@@ -1,14 +1,14 @@
 package phrase.towerManaEvent.command;
 
 import org.bukkit.entity.Player;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.config.data.Messages;
 
 public class CommandMapper {
     private final CommandLogger commandLogger;
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public CommandMapper(CommandLogger commandLogger, Plugin plugin) {
+    public CommandMapper(CommandLogger commandLogger, TowerManaEvent plugin) {
         this.commandLogger = commandLogger;
         this.plugin = plugin;
     }

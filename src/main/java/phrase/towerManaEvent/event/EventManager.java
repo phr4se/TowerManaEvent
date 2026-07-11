@@ -9,7 +9,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.ability.impl.Fireball;
@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventManager {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final HologramProvider hologramProvider;
     private SchematicManager schematicManager;
     private Stage stage;
@@ -45,7 +45,7 @@ public class EventManager {
     private final List<Player> players = new ArrayList<>();
     private Map<Location, Loot> loots;
 
-    public EventManager(Plugin plugin) {
+    public EventManager(TowerManaEvent plugin) {
         this.plugin = plugin;
         this.hologramProvider = plugin.getHologramProvider();
     }

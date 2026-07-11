@@ -4,7 +4,7 @@ import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.hologram.HologramService;
 import phrase.towerManaEvent.event.Loot;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 class DecentHologramsService implements HologramService {
 
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final Map<Loot, Hologram> holograms = new HashMap<>();
     private final Map<Loot, List<String>> lines = new HashMap<>();
     private boolean updateHologram;
 
-    public DecentHologramsService(Plugin plugin) {
+    public DecentHologramsService(TowerManaEvent plugin) {
         this.plugin = plugin;
     }
 

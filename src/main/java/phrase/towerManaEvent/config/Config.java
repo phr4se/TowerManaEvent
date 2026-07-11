@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.config.data.*;
 import phrase.towerManaEvent.hologram.HologramType;
@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Config {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private String prefix;
     private Messages messages;
     private CommandMessages commandMessages;
@@ -56,7 +56,7 @@ public class Config {
         language = Language.valueOf(fileConfiguration.getString("language").toUpperCase());
     }
 
-    public Config(Plugin plugin) {
+    public Config(TowerManaEvent plugin) {
         this.plugin = plugin;
         makeFolders();
     }

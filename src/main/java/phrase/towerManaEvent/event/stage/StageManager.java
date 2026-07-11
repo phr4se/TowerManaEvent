@@ -1,16 +1,16 @@
 package phrase.towerManaEvent.event.stage;
 
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class StageManager {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final Map<Integer, Stage> stages;
     private int current = 0;
 
-    public StageManager(Plugin plugin) {
+    public StageManager(TowerManaEvent plugin) {
         this.plugin = plugin;
         this.stages = new HashMap<>();
         initialize();

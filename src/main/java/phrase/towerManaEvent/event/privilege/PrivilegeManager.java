@@ -1,14 +1,14 @@
 package phrase.towerManaEvent.event.privilege;
 
 import org.bukkit.entity.Player;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.privilege.impl.EssentialsX;
 import phrase.towerManaEvent.event.privilege.impl.Vanilla;
 
 public class PrivilegeManager {
     private Privilege privilege;
 
-    public void setPrivilege(String type, Plugin plugin) {
+    public void setPrivilege(String type, TowerManaEvent plugin) {
         switch (type.toLowerCase()) {
             case "essentials" -> {
                 this.privilege = new EssentialsX(plugin);

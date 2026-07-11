@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.LootManager;
 import phrase.towerManaEvent.gui.MenuService;
 import phrase.towerManaEvent.util.Utils;
@@ -17,10 +17,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MenuChancesService implements MenuService, InventoryHolder {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final Inventory inventory;
 
-    public MenuChancesService(Plugin plugin) {
+    public MenuChancesService(TowerManaEvent plugin) {
         this.plugin = plugin;
         FileConfiguration fileConfiguration = plugin.getConfigFile().getFile("menus/menu-chances.yml");
         ConfigurationSection configurationSection = fileConfiguration.getConfigurationSection("menu");

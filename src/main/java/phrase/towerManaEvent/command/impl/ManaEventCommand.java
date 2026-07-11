@@ -1,7 +1,7 @@
 package phrase.towerManaEvent.command.impl;
 
 import org.bukkit.entity.Player;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.command.CommandHandler;
 import phrase.towerManaEvent.config.data.CommandMessages;
 import phrase.towerManaEvent.event.EventManager;
@@ -11,9 +11,9 @@ import phrase.towerManaEvent.event.exception.SchematicNotExist;
 import phrase.towerManaEvent.util.Utils;
 
 public class ManaEventCommand implements CommandHandler {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public ManaEventCommand(Plugin plugin) {
+    public ManaEventCommand(TowerManaEvent plugin) {
         this.plugin = plugin;
     }
 

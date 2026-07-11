@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.api.ClickMenuChancesEvent;
 import phrase.towerManaEvent.api.CloseMenuChancesEvent;
 import phrase.towerManaEvent.gui.impl.MenuChancesService;
@@ -25,9 +25,9 @@ import phrase.towerManaEvent.event.Loot;
 import phrase.towerManaEvent.event.EventManager;
 
 public class PlayerListener implements Listener {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public PlayerListener(Plugin plugin) {
+    public PlayerListener(TowerManaEvent plugin) {
         this.plugin = plugin;
     }
 

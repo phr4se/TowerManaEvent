@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.Loot;
 
@@ -21,11 +21,11 @@ public class SpiderWeb extends Ability {
     private final int y;
     private final int z;
     private final int radius;
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final long laterRemove;
     private final BukkitTask bukkitTask;
 
-    public SpiderWeb(int mana, double damage, Location location, int x, int y, int z, int radius, Plugin plugin, long laterRemove) {
+    public SpiderWeb(int mana, double damage, Location location, int x, int y, int z, int radius, TowerManaEvent plugin, long laterRemove) {
         super("Паутина", mana, damage);
         this.location = location;
         this.x = x;

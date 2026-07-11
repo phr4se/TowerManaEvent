@@ -23,7 +23,7 @@ import phrase.towerManaEvent.event.stage.StageManager;
 import phrase.towerManaEvent.util.Utils;
 import phrase.towerManaEvent.util.colorizer.ColorizerFactory;
 
-public final class Plugin extends JavaPlugin implements CommandExecutor {
+public final class TowerManaEvent extends JavaPlugin implements CommandExecutor {
     private final CommandLogger commandLogger = new CommandLogger(this);
     private final CommandMapper commandMapper = new CommandMapper(commandLogger, this);
     private final Config config = new Config(this);

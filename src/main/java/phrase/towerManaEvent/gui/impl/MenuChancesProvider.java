@@ -2,11 +2,11 @@ package phrase.towerManaEvent.gui.impl;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.gui.MenuProvider;
 
 public class MenuChancesProvider extends MenuProvider {
-    public MenuChancesProvider(Plugin plugin) {
+    public MenuChancesProvider(TowerManaEvent plugin) {
         super(new MenuChancesService(plugin));
     }
 

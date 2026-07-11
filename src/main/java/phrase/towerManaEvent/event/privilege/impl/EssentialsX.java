@@ -2,7 +2,7 @@ package phrase.towerManaEvent.event.privilege.impl;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.privilege.Privilege;
 import phrase.towerManaEvent.event.privilege.PrivilegeChecker;
 import phrase.towerManaEvent.event.privilege.PrivilegeDisabler;
@@ -10,7 +10,7 @@ import phrase.towerManaEvent.event.privilege.PrivilegeDisabler;
 public class EssentialsX implements Privilege {
     private Essentials essentials;
 
-    public EssentialsX(Plugin plugin) {
+    public EssentialsX(TowerManaEvent plugin) {
         this.essentials = (Essentials) plugin.getServer().getPluginManager().getPlugin("Essentials");
     }
 

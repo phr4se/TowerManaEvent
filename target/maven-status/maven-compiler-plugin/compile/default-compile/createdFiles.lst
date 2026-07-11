@@ -90,13 +90,13 @@ phrase\towerManaEvent\event\EventManager$4.class
 phrase\towerManaEvent\event\privilege\PrivilegeChecker.class
 phrase\towerManaEvent\util\colorizer\ColorizerFactory.class
 phrase\towerManaEvent\config\data\FireballSettings.class
+phrase\towerManaEvent\TowerManaEvent.class
 phrase\towerManaEvent\command\impl\ManaEventCommand.class
 phrase\towerManaEvent\event\ability\impl\SpiderWeb$1.class
 phrase\towerManaEvent\config\Config.class
 phrase\towerManaEvent\util\colorizer\ColorizerType.class
 phrase\towerManaEvent\event\EventManager.class
 phrase\towerManaEvent\api\ClickMenuChancesEvent.class
-phrase\towerManaEvent\Plugin.class
 phrase\towerManaEvent\event\EventManager$5.class
 phrase\towerManaEvent\event\exception\SchematicNotExist.class
 phrase\towerManaEvent\util\colorizer\ColorizerProvider.class

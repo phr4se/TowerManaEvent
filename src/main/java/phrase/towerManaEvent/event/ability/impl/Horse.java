@@ -9,7 +9,7 @@ import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.Loot;
 
@@ -21,13 +21,13 @@ public class Horse extends Ability {
     private final int distance;
     private final int num1;
     private final int num2;
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final int forwardBlocks;
     private final double speed;
     private final int knockbackBlocks;
     private final long laterDeath;
 
-    public Horse(int mana, double damage, Location location, int distance, int num1, int num2, Plugin plugin, int forwardBlocks, double speed, int knockbackBlocks, long laterDeath) {
+    public Horse(int mana, double damage, Location location, int distance, int num1, int num2, TowerManaEvent plugin, int forwardBlocks, double speed, int knockbackBlocks, long laterDeath) {
         super("Лошадь", mana, damage);
         this.location = location;
         this.distance = distance;

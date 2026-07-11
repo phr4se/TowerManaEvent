@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.Loot;
 
@@ -14,7 +14,7 @@ public class SplashPunch extends Ability {
     private final int radius;
     private final int stepRadius;
     private final long laterForward;
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final int particleCount;
     private final long laterForwardParticle;
     private final double step;
@@ -25,7 +25,7 @@ public class SplashPunch extends Ability {
     private final long laterBack;
     private final long laterBackParticle;
 
-    public SplashPunch(int mana, double damage, int count, long laterCount, int radius, int stepRadius, long laterForward, Plugin plugin, int particleCount, long laterForwardParticle, double step, Location location, int x, int y, int z, long laterBack, long laterBackParticle) {
+    public SplashPunch(int mana, double damage, int count, long laterCount, int radius, int stepRadius, long laterForward, TowerManaEvent plugin, int particleCount, long laterForwardParticle, double step, Location location, int x, int y, int z, long laterBack, long laterBackParticle) {
         super("Сплеш-урон", mana, damage);
         this.count = count;
         this.laterCount = laterCount;

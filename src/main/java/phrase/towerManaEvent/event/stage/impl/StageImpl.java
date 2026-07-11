@@ -3,7 +3,7 @@ package phrase.towerManaEvent.event.stage.impl;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.event.stage.Stage;
@@ -14,7 +14,7 @@ import java.util.Random;
 public class StageImpl extends Stage {
     private final List<AbilityType> availableAbilities;
 
-    public StageImpl(int id, boolean pvp, int duration, Plugin plugin, List<AbilityType> availableAbilities, boolean openChest) {
+    public StageImpl(int id, boolean pvp, int duration, TowerManaEvent plugin, List<AbilityType> availableAbilities, boolean openChest) {
         super(id, pvp, duration, plugin, openChest);
         this.availableAbilities = availableAbilities;
     }

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.api.ClickMenuChancesEvent;
 import phrase.towerManaEvent.api.CloseMenuChancesEvent;
 import phrase.towerManaEvent.event.LootManager;
@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class ManaListener implements Listener {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public ManaListener(Plugin plugin) {
+    public ManaListener(TowerManaEvent plugin) {
         this.plugin = plugin;
     }
 

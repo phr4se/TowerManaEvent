@@ -1,6 +1,6 @@
 package phrase.towerManaEvent.command;
 
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.command.impl.ManaChancesCommand;
 import phrase.towerManaEvent.command.impl.ManaEventCommand;
 
@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandLogger {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final Map<String, CommandDescription> commands;
 
-    public CommandLogger(Plugin plugin) {
+    public CommandLogger(TowerManaEvent plugin) {
         this.plugin = plugin;
         this.commands = new HashMap<>();
         initialize();

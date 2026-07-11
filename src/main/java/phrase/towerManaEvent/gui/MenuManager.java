@@ -1,12 +1,12 @@
 package phrase.towerManaEvent.gui;
 
 import org.bukkit.entity.Player;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 
 public class MenuManager {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
 
-    public MenuManager(Plugin plugin) {
+    public MenuManager(TowerManaEvent plugin) {
         this.plugin = plugin;
     }
 

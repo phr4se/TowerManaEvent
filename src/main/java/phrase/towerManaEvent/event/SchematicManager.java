@@ -21,7 +21,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 
 import java.io.File;
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class SchematicManager {
-    private final Plugin plugin;
+    private final TowerManaEvent plugin;
     private final File file;
     private final Map<Location, Material> blocks;
     private final List<String> regionFlagsName;
@@ -38,7 +38,7 @@ public class SchematicManager {
     private Location pos1;
     private Location pos2;
 
-    public SchematicManager(Plugin plugin, File file, List<String> regionFlagsName) {
+    public SchematicManager(TowerManaEvent plugin, File file, List<String> regionFlagsName) {
         this.plugin = plugin;
         this.file = file;
         this.blocks = new HashMap<>();

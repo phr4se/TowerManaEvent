@@ -1,7 +1,7 @@
 package phrase.towerManaEvent.hologram.impl;
 
 import org.bukkit.Location;
-import phrase.towerManaEvent.Plugin;
+import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.hologram.HologramProvider;
 import phrase.towerManaEvent.event.Loot;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DecentHologramsProvider extends HologramProvider {
 
-    public DecentHologramsProvider(Plugin plugin) {
+    public DecentHologramsProvider(TowerManaEvent plugin) {
         super(new DecentHologramsService(plugin));
     }
 
