@@ -1,17 +1,17 @@
 other:
   actions-start-event:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fEvent started"
-    - "[broadcast] &6║ &fCoordinates: &6%x% %y% %z%"
-    - "[broadcast] &6╚"
+    - "[message] &6╔"
+    - "[message] &6║ &fEvent started"
+    - "[message] &6║ &fCoordinates: &6%x% %y% %z%"
+    - "[message] &6╚"
   actions-end-event:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fEvent stopped"
-    - "[broadcast] &6╚"
+    - "[message] &6╔"
+    - "[message] &6║ &fEvent stopped"
+    - "[message] &6╚"
   actions-switch-stage:
-    - "[broadcast] &6╔"
-    - "[broadcast] &6║ &fStage switched"
-    - "[broadcast] &6╚"
+    - "[message] &6╔"
+    - "[message] &6║ &fStage switched"
+    - "[message] &6╚"
   hologram-lines:
     - ""
     - "&b⚡ &fMana: &b%mana%"

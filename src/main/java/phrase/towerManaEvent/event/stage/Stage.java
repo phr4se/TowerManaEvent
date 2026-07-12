@@ -39,6 +39,10 @@ public abstract class Stage {
         return duration;
     }
 
+    public void setRemained(int remained) {
+        this.remained = remained;
+    }
+
     public int getRemained() {
         return remained;
     }

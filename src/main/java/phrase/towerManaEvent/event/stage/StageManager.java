@@ -26,12 +26,15 @@ public class StageManager {
     }
 
     public Stage getFirstStage() {
-        return stages.get(current);
+        Stage stage = stages.get(current);
+        stage.setRemained(stage.getDuration());
+        return stage;
     }
 
     public Stage getNextStage() {
         Stage stage = stages.get(++current);
         if (stage == null) current = 0;
+        else stage.setRemained(stage.getDuration());
         return stage;
     }
 }

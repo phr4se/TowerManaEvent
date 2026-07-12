@@ -6,20 +6,20 @@ settings:
   schematic-name: "event.schem"
   stages:
     one:
-      pvp: false
+      pvp: true
       duration: 120
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
-      open-chest: true
+      open-chest: false
     two:
-      pvp: false
+      pvp: true
       duration: 120
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
         - "SPLASH_PUNCH"
-      open-chest: true
+      open-chest: false
     three:
       pvp: true
       duration: 120
@@ -38,9 +38,9 @@ settings:
   mana: 1000
   chests:
     1:
-      offset-x: 5
-      offset-y: 0
-      offset-z: 5
+      offset-x: 9
+      offset-y: 1
+      offset-z: 15
   settings-abilities:
     fireball:
       radius-search-players: 10

@@ -3,6 +3,8 @@ package phrase.towerManaEvent.event;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
@@ -241,6 +243,8 @@ public class EventManager {
         this.stage = plugin.getStageManager().getNextStage();
         if (stage != null) {
             stage.setup();
+            if(stage.isOpenChest()) schematicManager.getProtectedCuboidRegion().setFlag(Flags.CHEST_ACCESS, StateFlag.State.ALLOW);
+            else schematicManager.getProtectedCuboidRegion().setFlag(Flags.CHEST_ACCESS, StateFlag.State.DENY);
             Settings settings = plugin.getConfigFile().getSettings();
             List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getOther().actionsSwitchStage().stream().map(this::replacePlaceholder).collect(Collectors.toList());
             plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));

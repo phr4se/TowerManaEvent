@@ -35,7 +35,6 @@ public class StageImpl extends Stage {
                         for (ItemStack itemStack : contents) {
                             int randomSlot = random.nextInt(inventory.getSize());
                             inventory.setItem(randomSlot, itemStack);
-                            ;
                         }
                     });
                 }
