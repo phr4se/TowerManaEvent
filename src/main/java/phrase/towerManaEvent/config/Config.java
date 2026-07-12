@@ -52,6 +52,10 @@ public class Config {
 
     private Language language;
 
+    public Language getLanguage() {
+        return language;
+    }
+
     public void setLanguage(FileConfiguration fileConfiguration) {
         language = Language.valueOf(fileConfiguration.getString("language").toUpperCase());
     }
@@ -82,7 +86,7 @@ public class Config {
     }
 
     public FileConfiguration getFile(String fileName) {
-        return YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/" +  language.name, fileName));
+        return YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + "/" + language.name, fileName));
     }
 
     public void setupMessages() {

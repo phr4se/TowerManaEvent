@@ -81,7 +81,7 @@ public class ManaListener implements Listener {
                     enchants.add(entry.getKey().getKey() + ";" + entry.getValue());
                 configurationSection.set(key + ".enchantments", enchants);
             }
-            fileConfiguration.save(new File(plugin.getDataFolder(), "chances.yml"));
+            fileConfiguration.save(new File(plugin.getDataFolder() + "/" + plugin.getConfigFile().getLanguage().name, "chances.yml"));
         }
     }
 }

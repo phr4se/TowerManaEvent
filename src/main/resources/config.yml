@@ -11,7 +11,7 @@ settings:
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
-      open-chest: false
+      open-chest: true
     two:
       pvp: true
       duration: 120
@@ -19,7 +19,7 @@ settings:
         - "SPIDER_WEB"
         - "FIREBALL"
         - "SPLASH_PUNCH"
-      open-chest: false
+      open-chest: true
     three:
       pvp: true
       duration: 120
