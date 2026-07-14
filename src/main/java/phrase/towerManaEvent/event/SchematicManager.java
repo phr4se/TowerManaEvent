@@ -65,7 +65,6 @@ public class SchematicManager {
 
     public Map<Location, Loot> setChests(Map<AbilityType, Integer> abilities, int mana) {
         final Map<Location, Loot> loots = new HashMap<>();
-        plugin.reloadConfig();
         final ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.chests");
         for(String key : configurationSection.getKeys(false)) {
             int offsetX = configurationSection.getInt(key + ".offset-x");

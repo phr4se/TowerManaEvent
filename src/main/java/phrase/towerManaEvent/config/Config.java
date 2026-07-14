@@ -133,9 +133,9 @@ public class Config {
                 itemStack.addEnchantments(enchantments);
             }
             int amount = Integer.parseInt(configurationSectionChances.getString(key + ".amount"));
-            String displayName = configurationSection.getString(key + ".display-name");
+            String displayName = configurationSectionChances.getString(key + ".display-name");
             List<String> lore;
-            if (configurationSection.contains(key + ".lore")) lore = configurationSection.getStringList(key + ".lore");
+            if (configurationSectionChances.contains(key + ".lore")) lore = configurationSectionChances.getStringList(key + ".lore");
             else lore = new ArrayList<>();
             ItemMeta itemMeta = itemStack.getItemMeta();
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();

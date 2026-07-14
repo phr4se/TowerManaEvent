@@ -3,6 +3,7 @@ package phrase.towerManaEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,9 +37,10 @@ public final class TowerManaEvent extends JavaPlugin implements CommandExecutor 
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        reloadConfig();
         config.setLanguage(config.getDefaultFile("choose-language.yml"));
         config.createFiles("messages.yml", "menus/menu-chances.yml", "chances.yml", "other.yml");
-        saveDefaultConfig();
         config.setupSettings();
         Utils.colorizer = ColorizerFactory.getProvider(config.getSettings().colorizerType());
         config.setupMessages();
@@ -69,7 +71,14 @@ public final class TowerManaEvent extends JavaPlugin implements CommandExecutor 
                     Utils.sendMessage(player, commandResult.getMessage());
                 }
             }
-        } else Utils.sendMessage(sender, config.getMessages().notAPlayer());
+        } else {
+            if (sender instanceof ConsoleCommandSender) {
+                commandMapper.mapCommand(sender, args[0], args);
+                return true;
+            }
+            Utils.sendMessage(sender, config.getMessages().notAPlayer());
+            return true;
+        }
         return true;
     }
 

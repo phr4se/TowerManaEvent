@@ -1,5 +1,6 @@
 package phrase.towerManaEvent.command;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.config.data.Messages;
@@ -26,5 +27,13 @@ public class CommandMapper {
         if (!success)
             return new CommandResult(messages.incorrectArguments(), CommandResult.ResultStatus.INCORRECT_ARGUMENTS);
         return new CommandResult(null, CommandResult.ResultStatus.SUCCESS);
+    }
+
+    public void mapCommand(CommandSender sender, String label, String[] args) {
+        CommandDescription commandDescription = commandLogger.getCommands().get(label.toLowerCase());
+        if (commandDescription == null) return;
+        CommandHandler commandHandler = commandDescription.getCommandHandler();
+        if (commandHandler == null) return;
+        commandHandler.handler(sender, args);
     }
 }

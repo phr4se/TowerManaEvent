@@ -1,5 +1,6 @@
 package phrase.towerManaEvent.command.impl;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.command.CommandHandler;
@@ -31,6 +32,24 @@ public class ManaEventCommand implements CommandHandler {
             Utils.sendMessage(player, commandMessages.schematicDamaged());
         } catch (SchematicNotExist e) {
             Utils.sendMessage(player, commandMessages.schematicNotExist());
+        }
+        return true;
+    }
+
+    @Override
+    public boolean handler(CommandSender commandSender, String[] args) {
+        if (args.length < 2) return false;
+        CommandMessages commandMessages = plugin.getConfigFile().getCommandMessages();
+        EventManager eventManager = plugin.getEventManager();
+        try {
+            eventManager.startEvent();
+            Utils.sendMessage(commandSender, commandMessages.eventRun());
+        } catch (EventAlreadyRun e) {
+            Utils.sendMessage(commandSender, commandMessages.eventAlreadyRun());
+        } catch (SchematicDamaged e) {
+            Utils.sendMessage(commandSender, commandMessages.schematicDamaged());
+        } catch (SchematicNotExist e) {
+            Utils.sendMessage(commandSender, commandMessages.schematicNotExist());
         }
         return true;
     }
