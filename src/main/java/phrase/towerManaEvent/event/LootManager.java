@@ -30,12 +30,11 @@ public class LootManager {
         Random random = new Random();
         Map<ItemStack, Double> map = new HashMap<>();
         items.entrySet().forEach(entry -> map.put(entry.getValue(), chances.get(entry.getKey())));
-        return map.entrySet().stream().filter(entry -> random.nextDouble(bound) >= entry.getValue()).map(Map.Entry::getKey).map(itemStack -> {
+        return map.entrySet().stream().filter(entry -> random.nextDouble(bound) < entry.getValue()).map(Map.Entry::getKey).map(itemStack -> {
             ItemStack newItemStack = itemStack.clone();
-            ItemMeta itemMeta = newItemStack.getItemMeta();
+            ItemMeta itemMeta = itemStack.getItemMeta();
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-            if (persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING))
-                persistentDataContainer.remove(NamespacedKey.fromString("towermanaevent_key"));
+            if (persistentDataContainer.has(NamespacedKey.fromString("towermanaevent_key"), PersistentDataType.STRING)) persistentDataContainer.remove(NamespacedKey.fromString("towermanaevent_key"));
             newItemStack.setItemMeta(itemMeta);
             return newItemStack;
         }).toArray(ItemStack[]::new);

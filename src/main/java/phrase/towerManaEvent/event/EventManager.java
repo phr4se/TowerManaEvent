@@ -249,7 +249,10 @@ public class EventManager {
             List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getOther().actionsSwitchStage().stream().map(this::replacePlaceholder).collect(Collectors.toList());
             plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
             loots.values().forEach(loot -> loot.addMana(settings.plusManaStage()));
-        } else stopEvent();
+        } else {
+            this.stage = plugin.getStageManager().getFirstStage();
+            stopEvent();
+        }
     }
 
     public boolean isEventRunning() {
@@ -265,7 +268,7 @@ public class EventManager {
     }
 
     public Loot getRandomLoot() {
-        return loots.values().stream().toList().get(new Random().nextInt(loots.size()));
+        return loots.values().stream().findAny().get();
     }
 
     public Map<Location, Loot> getLoots() {

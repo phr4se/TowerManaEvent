@@ -65,8 +65,9 @@ public class SchematicManager {
 
     public Map<Location, Loot> setChests(Map<AbilityType, Integer> abilities, int mana) {
         final Map<Location, Loot> loots = new HashMap<>();
+        plugin.reloadConfig();
         final ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.chests");
-        configurationSection.getKeys(false).forEach(key -> {
+        for(String key : configurationSection.getKeys(false)) {
             int offsetX = configurationSection.getInt(key + ".offset-x");
             int offsetY = configurationSection.getInt(key + ".offset-y");
             int offsetZ = configurationSection.getInt(key + ".offset-z");
@@ -77,7 +78,7 @@ public class SchematicManager {
             Inventory inventory = null;
             if (location.getBlock().getState() instanceof Chest chest) inventory = chest.getInventory();
             loots.put(location, new Loot(inventory, location, abilities, mana));
-        });
+        }
         return loots;
     }
 

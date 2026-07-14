@@ -1,5 +1,8 @@
 package phrase.towerManaEvent.event.stage.impl;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -29,12 +32,15 @@ public class StageImpl extends Stage {
                 @Override
                 public void run() {
                     eventManager.getLoots().forEach((key, value) -> {
-                        Inventory inventory = value.getInventory();
-                        Random random = new Random();
-                        ItemStack[] contents = plugin.getLootManager().getRandomLoots(101);
-                        for (ItemStack itemStack : contents) {
-                            int randomSlot = random.nextInt(inventory.getSize());
-                            inventory.setItem(randomSlot, itemStack);
+                        if(key.getBlock().getState() instanceof Chest chest) {
+                            Inventory inventory = value.getInventory();
+                            Random random = new Random();
+                            ItemStack[] contents = plugin.getLootManager().getRandomLoots(101);
+                            for (ItemStack itemStack : contents) {
+                                int randomSlot = random.nextInt(inventory.getSize());
+                                inventory.setItem(randomSlot, itemStack);
+                            }
+                            chest.getInventory().setContents(inventory.getContents());
                         }
                     });
                 }

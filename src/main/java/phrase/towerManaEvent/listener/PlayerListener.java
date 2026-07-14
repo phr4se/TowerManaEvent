@@ -2,14 +2,17 @@ package phrase.towerManaEvent.listener;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -39,6 +42,16 @@ public class PlayerListener implements Listener {
             if (inventory == null || inventory.getHolder() == null) return;
             if (inventory.getHolder() instanceof MenuChancesService)
                 pluginManager.callEvent(new ClickMenuChancesEvent(player, event));
+        }
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        EventManager eventManager = plugin.getEventManager();
+        if (!eventManager.isEventRunning()) return;
+        for(Block block : event.blockList()) {
+            Loot chest = eventManager.getLoot(block.getLocation());
+            if (chest != null) event.setCancelled(true);
         }
     }
 

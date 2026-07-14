@@ -11,7 +11,7 @@ settings:
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
-      open-chest: true
+      open-chest: false
     two:
       pvp: true
       duration: 120
@@ -19,7 +19,7 @@ settings:
         - "SPIDER_WEB"
         - "FIREBALL"
         - "SPLASH_PUNCH"
-      open-chest: true
+      open-chest: false
     three:
       pvp: true
       duration: 120
@@ -37,10 +37,10 @@ settings:
     - "SPLASH_PUNCH;50"
   mana: 1000
   chests:
-    1:
-      offset-x: 9
-      offset-y: 1
-      offset-z: 15
+      1:
+        offset-x: 9
+        offset-y: 1
+        offset-z: 15
   settings-abilities:
     fireball:
       radius-search-players: 10

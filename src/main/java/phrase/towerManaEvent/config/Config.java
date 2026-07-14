@@ -78,7 +78,7 @@ public class Config {
 
     public void createFiles(String... filesName) {
         for (String fileName : filesName) {
-            File file = new File(plugin.getDataFolder() + language.name, fileName);
+            File file = new File(plugin.getDataFolder() + "/" + language.name, fileName);
             if (!file.exists()) {
                 plugin.saveResource(language.name + "/" + fileName, false);
             }
