@@ -3,6 +3,7 @@ package phrase.towerManaEvent.event;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import phrase.towerManaEvent.event.ability.AbilityType;
+import phrase.towerManaEvent.util.MaskedRealType;
 
 import java.util.Map;
 import java.util.Random;
@@ -15,6 +16,7 @@ public class Loot {
     private final Location location;
     private final Map<AbilityType, Integer> abilities;
     private int mana;
+    private final MaskedRealType maskedRealType = new MaskedRealType();
 
     public Loot(Inventory inventory, Location location, Map<AbilityType, Integer> abilities, int mana) {
         this.uuid = UUID.randomUUID();
@@ -50,6 +52,10 @@ public class Loot {
 
     public int getMana() {
         return mana;
+    }
+
+    public MaskedRealType getMaskedRealType() {
+        return maskedRealType;
     }
 
     public UUID getUuid() {

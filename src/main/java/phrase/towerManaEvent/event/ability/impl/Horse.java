@@ -49,6 +49,7 @@ public class Horse extends Ability {
         for (int i = num1; i < num2; i++) {
             double offsetFromCenter = i * distance;
             Location offsetLocation = location.clone().add(perpendicular.clone().multiply(offsetFromCenter));
+            offsetLocation.setZ(offsetLocation.getZ() - 3);
             long yValue = (long) offsetLocation.getY();
             if (offsetLocation.getY() != (double) yValue) {
                 offsetLocation.setY((int) Math.floor(offsetLocation.getY()));

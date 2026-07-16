@@ -38,6 +38,7 @@ public class Config {
     private HorseSettings horseSettings;
     private SpiderWebSettings spiderWebSettings;
     private SplashPunchSettings splashPunchSettings;
+    private GlowingSettings glowingSettings;
     private Other other;
 
     public enum Language {
@@ -163,7 +164,11 @@ public class Config {
                 configurationSection.getString("type"),
                 configurationSection.getStringList("region-flags"),
                 configurationSection.getInt("plus-mana-stage"),
-                items);
+                items,
+                configurationSection.getInt("boost-y"),
+                configurationSection.getInt("count-drops"),
+                configurationSection.getLong("later-air-or-lighting-drop"),
+                configurationSection.getInt("cooldown-taking-an-item"));
     }
 
     public void setupOther() {
@@ -221,6 +226,13 @@ public class Config {
                 configurationSectionSplashPunch.getLong("later-back"),
                 configurationSectionSplashPunch.getLong("later-back-particle")
         );
+        final ConfigurationSection configurationSectionGlowing = configurationSection.getConfigurationSection("glowing");
+        glowingSettings = new GlowingSettings(
+                configurationSectionGlowing.getDouble("nearby-x"),
+                configurationSectionGlowing.getDouble("nearby-y"),
+                configurationSectionGlowing.getDouble("nearby-z"),
+                configurationSectionGlowing.getInt("duration")
+        );
     }
 
     public String getMessagePrefixed(String message) {
@@ -263,6 +275,10 @@ public class Config {
 
     public SplashPunchSettings getSplashPunchSettings() {
         return splashPunchSettings;
+    }
+
+    public GlowingSettings getGlowingSettings() {
+        return glowingSettings;
     }
 
     public Other getOther() {

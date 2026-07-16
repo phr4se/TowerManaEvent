@@ -20,7 +20,11 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 
@@ -81,6 +85,19 @@ public class SchematicManager {
         return loots;
     }
 
+    public Set<Location> getDropsLocation(int boostY, int countDrops) {
+        final World world = pos1.getWorld();
+        final int minX = Math.min(pos1.getBlockX(), pos2.getBlockX()), minY = Math.min(pos1.getBlockY(), pos2.getBlockY()), minZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ()), maxX = Math.max(pos1.getBlockX(), pos2.getBlockX()), maxZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+        final Random random = new Random();
+        final Set<Location> dropsLocations = new HashSet<>();
+        for(int i = 0; i < countDrops; i++) {
+            int newX = random.nextInt(maxX + 1 - minX) + minX, newY = minY + boostY, newZ = random.nextInt((maxZ + 1 - minZ) + minZ);
+            final Location dropsLocation = new Location(world, newX, newY, newZ);
+            dropsLocations.add(dropsLocation);
+        }
+        return dropsLocations;
+    }
+
     private void saveBlocks() {
         World world = pos1.getWorld();
         for (int x = pos1.getBlockX(); x <= pos2.getBlockX(); x++) {
@@ -97,10 +114,20 @@ public class SchematicManager {
 
     public void regenerationBlocks() {
         World world = pos1.getWorld();
+        ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings");
+        boolean teleport = configurationSection.getBoolean("teleport");
         for (int x = pos1.getBlockX(); x <= pos2.getBlockX(); x++) {
             for (int y = pos1.getBlockY() - 1; y <= pos2.getBlockY(); y++) {
                 for (int z = pos1.getBlockZ(); z <= pos2.getBlockZ(); z++) {
                     Location location = new Location(world, x, y, z);
+                    if (teleport && !world.getNearbyEntities(location, 1, 1, 1).isEmpty()) {
+                        for (Entity entity : world.getNearbyEntities(location, 1, 1, 1)) {
+                            if (entity instanceof Player player) {
+                                player.teleport(new Location(world, x, pos2.getBlockY() + 3, z));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 100, 0));
+                            }
+                        }
+                    }
                     Material material;
                     if (!blocks.containsKey(location)) material = Material.AIR;
                     else material = blocks.remove(location);

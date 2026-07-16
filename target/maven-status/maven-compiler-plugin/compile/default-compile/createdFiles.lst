@@ -1,8 +1,10 @@
 phrase\towerManaEvent\event\EventManager$3.class
+phrase\towerManaEvent\event\ability\impl\Glowing.class
 phrase\towerManaEvent\gui\MenuType.class
 phrase\towerManaEvent\event\stage\StageManager.class
 phrase\towerManaEvent\action\impl\BroadcastAction.class
 phrase\towerManaEvent\event\LootManager.class
+phrase\towerManaEvent\event\EventManager$3$1.class
 phrase\towerManaEvent\event\exception\EventAlreadyRun.class
 phrase\towerManaEvent\event\ability\impl\Fireball.class
 phrase\towerManaEvent\util\colorizer\impl\MiniMessageProvider.class
@@ -10,6 +12,7 @@ phrase\towerManaEvent\hologram\HologramFactory.class
 phrase\towerManaEvent\command\CommandResult$ResultStatus.class
 phrase\towerManaEvent\config\data\SplashPunchSettings.class
 phrase\towerManaEvent\gui\MenuProvider.class
+phrase\towerManaEvent\event\EventManager$6.class
 phrase\towerManaEvent\event\privilege\Privilege.class
 phrase\towerManaEvent\gui\MenuFactory$1.class
 phrase\towerManaEvent\event\ability\impl\Fireball$1.class
@@ -26,6 +29,7 @@ phrase\towerManaEvent\action\ActionTransformer.class
 phrase\towerManaEvent\event\EventManager$1.class
 phrase\towerManaEvent\gui\impl\MenuChancesProvider.class
 phrase\towerManaEvent\gui\impl\MenuChancesService.class
+phrase\towerManaEvent\util\Cooldown.class
 phrase\towerManaEvent\event\ability\Ability.class
 phrase\towerManaEvent\event\stage\StageType.class
 phrase\towerManaEvent\command\CommandLogger.class
@@ -37,6 +41,7 @@ phrase\towerManaEvent\event\privilege\PrivilegeType.class
 phrase\towerManaEvent\action\ActionType.class
 phrase\towerManaEvent\event\ability\impl\Horse$1$1.class
 phrase\towerManaEvent\command\CommandResult.class
+phrase\towerManaEvent\config\data\GlowingSettings.class
 phrase\towerManaEvent\hologram\HologramType.class
 phrase\towerManaEvent\event\EventManager$2.class
 phrase\towerManaEvent\action\context\impl\StringContext.class
@@ -49,6 +54,7 @@ phrase\towerManaEvent\config\data\HorseSettings.class
 phrase\towerManaEvent\event\ability\impl\SpiderWeb.class
 phrase\towerManaEvent\event\stage\Stage.class
 phrase\towerManaEvent\event\ability\impl\SplashPunch$1$1.class
+phrase\towerManaEvent\event\ability\impl\Glowing$1.class
 phrase\towerManaEvent\event\ability\AbilityType.class
 phrase\towerManaEvent\config\data\CommandMessages.class
 phrase\towerManaEvent\event\ability\impl\SpiderWeb$2.class
@@ -70,6 +76,7 @@ phrase\towerManaEvent\config\data\Other.class
 phrase\towerManaEvent\config\data\Messages.class
 phrase\towerManaEvent\listener\PlayerListener.class
 phrase\towerManaEvent\command\CommandDescription.class
+phrase\towerManaEvent\util\MaskedRealType.class
 phrase\towerManaEvent\action\Action.class
 phrase\towerManaEvent\util\colorizer\ColorizerService.class
 phrase\towerManaEvent\util\colorizer\ColorizerFactory$1.class

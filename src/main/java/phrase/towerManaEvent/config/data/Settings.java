@@ -17,5 +17,6 @@ public record Settings(ColorizerType colorizerType, HologramType hologramType, W
                        String schematicName, long useAbilities, Map<AbilityType, Integer> abilities, int mana,
                        Map<String, Double> chances, BarColor barColor, BarStyle barStyle,
                        BarFlag[] barFlags, int plusMana, String type,
-                       List<String> regionFlagsName, int plusManaStage, Map<String, ItemStack> items) {
+                       List<String> regionFlagsName, int plusManaStage, Map<String, ItemStack> items,
+                       int boostY, int countDrops, long laterAirOrLightingDrop, int cooldownTakingAnItem) {
 }

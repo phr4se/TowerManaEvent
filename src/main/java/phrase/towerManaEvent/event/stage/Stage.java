@@ -14,14 +14,18 @@ public abstract class Stage {
     protected int remained;
     protected final boolean openChest;
     private Ability latestUsedAbility;
+    private final boolean airOrLightingDrop;
+    private final boolean withLighting;
 
-    public Stage(int id, boolean pvp, int duration, TowerManaEvent plugin, boolean openChest) {
+    public Stage(int id, boolean pvp, int duration, TowerManaEvent plugin, boolean openChest, boolean airOrLightingDrop, boolean withLighting) {
         this.id = id;
         this.pvp = pvp;
         this.plugin = plugin;
         this.duration = duration;
         this.remained = duration;
         this.openChest = openChest;
+        this.airOrLightingDrop = airOrLightingDrop;
+        this.withLighting = withLighting;
     }
 
     public abstract void setup();
@@ -41,6 +45,14 @@ public abstract class Stage {
 
     public void setRemained(int remained) {
         this.remained = remained;
+    }
+
+    public boolean isAirOrLightingDrop() {
+        return airOrLightingDrop;
+    }
+
+    public boolean isWithLighting() {
+        return withLighting;
     }
 
     public int getRemained() {

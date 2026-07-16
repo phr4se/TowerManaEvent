@@ -4,5 +4,6 @@ public enum AbilityType {
     FIREBALL,
     HORSE,
     SPIDER_WEB,
-    SPLASH_PUNCH;
+    SPLASH_PUNCH,
+    GLOWING;
 }

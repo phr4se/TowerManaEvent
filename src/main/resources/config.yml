@@ -4,6 +4,8 @@ settings:
   coordinate-range-x: 1000
   coordinate-range-z: 1000
   schematic-name: "event.schem"
+  teleport: true
+  later-air-or-lighting-drop: 480
   stages:
     one:
       pvp: true
@@ -11,7 +13,12 @@ settings:
       available-abilities:
         - "SPIDER_WEB"
         - "FIREBALL"
+        - "SPLASH_PUNCH"
+        - "HORSE"
+        - "GLOWING"
       open-chest: false
+      air-or-lighting-drop: false
+      with-lighting: false
     two:
       pvp: true
       duration: 120
@@ -19,7 +26,11 @@ settings:
         - "SPIDER_WEB"
         - "FIREBALL"
         - "SPLASH_PUNCH"
+        - "HORSE"
+        - "GLOWING"
       open-chest: false
+      air-or-lighting-drop: true
+      with-lighting: false
     three:
       pvp: true
       duration: 120
@@ -28,13 +39,17 @@ settings:
         - "FIREBALL"
         - "SPLASH_PUNCH"
         - "HORSE"
+        - "GLOWING"
       open-chest: true
+      air-or-lighting-drop: true
+      with-lighting: true
   use-abilities: 120
   abilities:
     - "FIREBALL;50"
     - "HORSE;50"
     - "SPIDER_WEB;50"
     - "SPLASH_PUNCH;50"
+    - "GLOWING;50"
   mana: 1000
   chests:
       1:
@@ -44,7 +59,7 @@ settings:
   settings-abilities:
     fireball:
       radius-search-players: 10
-      damage: 10
+      damage: 15
       count-fireball: 10
       boost-y: 3
       offset-location-x: 5
@@ -54,21 +69,21 @@ settings:
       offset-z: 1
       speed: 3
     horse:
-      damage: 10
+      damage: 15
       distance: 3
       num-one: -2
       num-two: 3
-      forward-blocks: 3
+      forward-blocks: 10
       speed: 0.2
       knockback-blocks: 3
-      later-death: 20
+      later-death: 60
     spider-web:
       radius-search-players: 10
-      damage: 1
+      damage: 5
       radius: 1
       later-remove: 40
     splash-punch:
-      damage: 1
+      damage: 5
       count: 1
       later-count: 2
       radius: 10
@@ -80,6 +95,11 @@ settings:
       radius-search-players: 10
       later-back: 1
       later-back-particle: 0
+    glowing:
+      nearby-x: 5
+      nearby-y: 5
+      nearby-z: 5
+      duration: 100
   type: "Essentials"
   hologram-provider: "DECENT_HOLOGRAMS"
   bar-color: "YELLOW"
@@ -88,3 +108,6 @@ settings:
   plus-mana-stage: 1000
   region-flags:
     - "BUILD: DENY"
+  boost-y: 15
+  count-drops: 5
+  cooldown-taking-an-item: 100

@@ -21,6 +21,7 @@ C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerMa
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\Config.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\CommandMessages.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\FireballSettings.java
+C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\GlowingSettings.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\HorseSettings.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Messages.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\config\data\Other.java
@@ -30,6 +31,7 @@ C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerMa
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\Ability.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\AbilityType.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\impl\Fireball.java
+C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\impl\Glowing.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\impl\Horse.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\impl\SpiderWeb.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\event\ability\impl\SplashPunch.java
@@ -76,4 +78,6 @@ C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerMa
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\HexService.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\MiniMessageProvider.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\colorizer\impl\MiniMessageService.java
+C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\Cooldown.java
+C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\MaskedRealType.java
 C:\Users\V Tereshchenko\IdeaProjects\TowerManaEvent\src\main\java\phrase\towerManaEvent\util\Utils.java

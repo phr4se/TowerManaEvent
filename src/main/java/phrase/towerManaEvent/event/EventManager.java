@@ -8,16 +8,15 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import org.bukkit.*;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.Ability;
 import phrase.towerManaEvent.event.ability.AbilityType;
-import phrase.towerManaEvent.event.ability.impl.Fireball;
-import phrase.towerManaEvent.event.ability.impl.Horse;
-import phrase.towerManaEvent.event.ability.impl.SpiderWeb;
-import phrase.towerManaEvent.event.ability.impl.SplashPunch;
+import phrase.towerManaEvent.event.ability.impl.*;
 import phrase.towerManaEvent.action.ActionExecutor;
 import phrase.towerManaEvent.action.ActionTransformer;
 import phrase.towerManaEvent.config.Config;
@@ -123,6 +122,7 @@ public class EventManager {
         FireballSettings fireballSettings = config.getFireballSettings();
         SpiderWebSettings spiderWebSettings = config.getSpiderWebSettings();
         SplashPunchSettings splashPunchSettings = config.getSplashPunchSettings();
+        GlowingSettings glowingSettings = config.getGlowingSettings();
         bukkitTaskUseAbilities = new BukkitRunnable() {
             @Override
             public void run() {
@@ -157,11 +157,47 @@ public class EventManager {
                                 ability.use(loot);
                                 stage.setLatestUsedAbility(ability);
                             }
+                            case GLOWING -> {
+                                Ability ability = new Glowing(mana, 0, plugin, glowingSettings.nearbyX(), glowingSettings.nearbyY(), glowingSettings.nearbyZ(), glowingSettings.duration());
+                                ability.use(loot);
+                                stage.setLatestUsedAbility(ability);
+                            }
                         }
                     }
                 }.runTask(plugin);
             }
         }.runTaskTimerAsynchronously(plugin, 0L, plugin.getConfigFile().getSettings().useAbilities());
+    }
+
+    public void startTaskAirOrLightingDrop(boolean withLighting) {
+        Settings settings = plugin.getConfigFile().getSettings();
+        new BukkitRunnable() {
+            final int boostY = settings.boostY();
+            final int countDrops = settings.countDrops();
+            final LootManager lootManager = plugin.getLootManager();
+            final long laterAirOrLightingDrop = settings.laterAirOrLightingDrop();
+            @Override
+            public void run() {
+                final Set<Location> dropsLocation = schematicManager.getDropsLocation(boostY, countDrops);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for (Location location : dropsLocation) {
+                            Optional<ItemStack> optional = Arrays.stream(lootManager.getRandomLoots(101)).findAny();
+                            if (optional.isEmpty()) return;
+                            final World world = location.getWorld();
+                            ItemStack itemStack = optional.get();
+                            if (withLighting) {
+                                world.strikeLightning(location);
+                                location.setY(world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()));
+                            }
+                            Item item = world.dropItem(location, itemStack);
+                            item.setGlowing(true);
+                        }
+                    }
+                }.runTaskLater(plugin, laterAirOrLightingDrop);
+            }
+        }.runTaskAsynchronously(plugin);
     }
 
     private void stopEvent() {

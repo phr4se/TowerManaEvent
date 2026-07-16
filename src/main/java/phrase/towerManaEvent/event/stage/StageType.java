@@ -32,7 +32,10 @@ public enum StageType {
                         configurationSectionOne.getInt("duration"),
                         plugin,
                         configurationSectionOne.getStringList("available-abilities").stream().map(string -> AbilityType.valueOf(string.toUpperCase())).collect(Collectors.toList()),
-                        configurationSectionOne.getBoolean("open-chest")));
+                        configurationSectionOne.getBoolean("open-chest"),
+                        configurationSectionOne.getBoolean("air-or-lighting-drop"),
+                        configurationSectionOne.getBoolean("with-lighting")
+                        ));
             }
             case TWO -> {
                 final ConfigurationSection configurationSectionTwo = configurationSection.getConfigurationSection("two");
@@ -41,7 +44,9 @@ public enum StageType {
                         configurationSectionTwo.getInt("duration"),
                         plugin,
                         configurationSectionTwo.getStringList("available-abilities").stream().map(string -> AbilityType.valueOf(string.toUpperCase())).collect(Collectors.toList()),
-                        configurationSectionTwo.getBoolean("open-chest")));
+                        configurationSectionTwo.getBoolean("open-chest"),
+                        configurationSectionTwo.getBoolean("air-or-lighting-drop"),
+                        configurationSectionTwo.getBoolean("with-lighting")));
             }
             case THREE -> {
                 final ConfigurationSection configurationSectionThree = configurationSection.getConfigurationSection("three");
@@ -50,7 +55,9 @@ public enum StageType {
                         configurationSectionThree.getInt("duration"),
                         plugin,
                         configurationSectionThree.getStringList("available-abilities").stream().map(string -> AbilityType.valueOf(string.toUpperCase())).collect(Collectors.toList()),
-                        configurationSectionThree.getBoolean("open-chest")));
+                        configurationSectionThree.getBoolean("open-chest"),
+                        configurationSectionThree.getBoolean("air-or-lighting-drop"),
+                        configurationSectionThree.getBoolean("with-lighting")));
             }
         }
     }

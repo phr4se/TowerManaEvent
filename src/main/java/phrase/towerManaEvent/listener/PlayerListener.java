@@ -1,5 +1,6 @@
 package phrase.towerManaEvent.listener;
 
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -9,7 +10,6 @@ import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -18,16 +18,24 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.api.ClickMenuChancesEvent;
 import phrase.towerManaEvent.api.CloseMenuChancesEvent;
+import phrase.towerManaEvent.config.data.Settings;
 import phrase.towerManaEvent.gui.impl.MenuChancesService;
 import phrase.towerManaEvent.event.Loot;
 import phrase.towerManaEvent.event.EventManager;
+import phrase.towerManaEvent.util.Cooldown;
+import phrase.towerManaEvent.util.MaskedRealType;
 
-public class PlayerListener implements Listener {
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.UUID;
+
+public class PlayerListener extends Cooldown implements Listener {
     private final TowerManaEvent plugin;
 
     public PlayerListener(TowerManaEvent plugin) {
@@ -40,8 +48,34 @@ public class PlayerListener implements Listener {
         if (event.getWhoClicked() instanceof Player player) {
             Inventory inventory = event.getClickedInventory();
             if (inventory == null || inventory.getHolder() == null) return;
-            if (inventory.getHolder() instanceof MenuChancesService)
-                pluginManager.callEvent(new ClickMenuChancesEvent(player, event));
+            if (inventory.getHolder() instanceof MenuChancesService) pluginManager.callEvent(new ClickMenuChancesEvent(player, event));
+            else if (inventory.getHolder() instanceof Chest chest) {
+                Loot loot = plugin.getEventManager().getLoot(chest.getLocation());
+                if (loot != null) {
+                    ItemStack itemStack = event.getCurrentItem();
+                    if (itemStack == null) return;
+                    int slot = event.getSlot();
+                    MaskedRealType maskedRealType = loot.getMaskedRealType();
+                    if(maskedRealType.isMasked(slot)) {
+                        UUID playerUUID = player.getUniqueId();
+                        if(hasCooldown(playerUUID)) {
+                            if(!player.hasCooldown(getCooldown(playerUUID))) removeCooldown(playerUUID);
+                            else {
+                                event.setCancelled(true);
+                                return;
+                            }
+                        }
+                        Material material = maskedRealType.getRealType(slot);
+                        itemStack.setType(material);
+                        Settings settings = plugin.getConfigFile().getSettings();
+                        int cooldownTakingAnItem = settings.cooldownTakingAnItem();
+                        MaskedRealType.MASK.stream().filter(Objects::nonNull).filter(cooldown -> cooldown != Material.AIR).forEach(cooldown -> {
+                            player.setCooldown(cooldown, cooldownTakingAnItem);
+                            cooldown(playerUUID, cooldown);
+                        });
+                    }
+                }
+            }
         }
     }
 
@@ -57,10 +91,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        PluginManager pluginManager = plugin.getServer().getPluginManager();
-        Inventory inventory = event.getPlayer().getOpenInventory().getTopInventory();
-        if (inventory.getHolder() instanceof MenuChancesService)
-            pluginManager.callEvent(new CloseMenuChancesEvent(inventory));
+        if(event.getPlayer() instanceof Player player) {
+            UUID playerUUID = player.getUniqueId();
+            PluginManager pluginManager = plugin.getServer().getPluginManager();
+            Inventory inventory = player.getOpenInventory().getTopInventory();
+            if (inventory.getHolder() instanceof MenuChancesService)
+                pluginManager.callEvent(new CloseMenuChancesEvent(inventory));
+        }
     }
 
     @EventHandler
@@ -87,7 +124,10 @@ public class PlayerListener implements Listener {
         Block block = event.getClickedBlock();
         Loot chest = eventManager.getLoot(block.getLocation());
         if (chest != null) {
-            if (!eventManager.getStage().isOpenChest()) event.setCancelled(true);
+            if (!eventManager.getStage().isOpenChest()) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 

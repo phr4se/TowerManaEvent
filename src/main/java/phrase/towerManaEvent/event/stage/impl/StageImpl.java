@@ -1,15 +1,19 @@
 package phrase.towerManaEvent.event.stage.impl;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.event.stage.Stage;
+import phrase.towerManaEvent.util.MaskedRealType;
+import phrase.towerManaEvent.util.Utils;
 
 import java.util.List;
 import java.util.Random;
@@ -17,8 +21,8 @@ import java.util.Random;
 public class StageImpl extends Stage {
     private final List<AbilityType> availableAbilities;
 
-    public StageImpl(int id, boolean pvp, int duration, TowerManaEvent plugin, List<AbilityType> availableAbilities, boolean openChest) {
-        super(id, pvp, duration, plugin, openChest);
+    public StageImpl(int id, boolean pvp, int duration, TowerManaEvent plugin, List<AbilityType> availableAbilities, boolean openChest, boolean airOrLightingDrop, boolean withLighting) {
+        super(id, pvp, duration, plugin, openChest, airOrLightingDrop, withLighting);
         this.availableAbilities = availableAbilities;
     }
 
@@ -38,6 +42,8 @@ public class StageImpl extends Stage {
                             ItemStack[] contents = plugin.getLootManager().getRandomLoots(101);
                             for (ItemStack itemStack : contents) {
                                 int randomSlot = random.nextInt(inventory.getSize());
+                                value.getMaskedRealType().mask(randomSlot, itemStack.getType());
+                                itemStack.setType(MaskedRealType.MASK.stream().toList().get(new Random().nextInt(MaskedRealType.MASK.size())));
                                 inventory.setItem(randomSlot, itemStack);
                             }
                             chest.getInventory().setContents(inventory.getContents());
@@ -46,6 +52,7 @@ public class StageImpl extends Stage {
                 }
             }.runTask(plugin);
         }
+        if(isAirOrLightingDrop()) eventManager.startTaskAirOrLightingDrop(isWithLighting());
     }
 
     @Override
