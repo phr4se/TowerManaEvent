@@ -59,6 +59,7 @@ public final class TowerManaEvent extends JavaPlugin implements CommandExecutor 
 
     @Override
     public void onDisable() {
+        if(eventManager.isEventRunning()) eventManager.stopEvent();
     }
 
     @Override

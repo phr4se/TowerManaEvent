@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -28,14 +30,12 @@ import phrase.towerManaEvent.config.data.Settings;
 import phrase.towerManaEvent.gui.impl.MenuChancesService;
 import phrase.towerManaEvent.event.Loot;
 import phrase.towerManaEvent.event.EventManager;
-import phrase.towerManaEvent.util.Cooldown;
 import phrase.towerManaEvent.util.MaskedRealType;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
-public class PlayerListener extends Cooldown implements Listener {
+public class PlayerListener implements Listener {
     private final TowerManaEvent plugin;
 
     public PlayerListener(TowerManaEvent plugin) {
@@ -57,13 +57,9 @@ public class PlayerListener extends Cooldown implements Listener {
                     int slot = event.getSlot();
                     MaskedRealType maskedRealType = loot.getMaskedRealType();
                     if(maskedRealType.isMasked(slot)) {
-                        UUID playerUUID = player.getUniqueId();
-                        if(hasCooldown(playerUUID)) {
-                            if(!player.hasCooldown(getCooldown(playerUUID))) removeCooldown(playerUUID);
-                            else {
-                                event.setCancelled(true);
-                                return;
-                            }
+                        if(player.hasCooldown(itemStack.getType())) {
+                            event.setCancelled(true);
+                            return;
                         }
                         Material material = maskedRealType.getRealType(slot);
                         itemStack.setType(material);
@@ -71,7 +67,6 @@ public class PlayerListener extends Cooldown implements Listener {
                         int cooldownTakingAnItem = settings.cooldownTakingAnItem();
                         MaskedRealType.MASK.stream().filter(Objects::nonNull).filter(cooldown -> cooldown != Material.AIR).forEach(cooldown -> {
                             player.setCooldown(cooldown, cooldownTakingAnItem);
-                            cooldown(playerUUID, cooldown);
                         });
                     }
                 }
@@ -142,6 +137,19 @@ public class PlayerListener extends Cooldown implements Listener {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof SkeletonHorse skeletonHorse) {
             if (skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING))
                 event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        BossBar bossBar = plugin.getServer().getBossBar(NamespacedKey.fromString("towermanaevent_bossbar"));
+        if(bossBar != null) {
+            Player player = event.getPlayer();
+            if (!plugin.getEventManager().isEventRunning()) {
+                if (bossBar.getPlayers().contains(player)) bossBar.removePlayer(player);
+            } else {
+                if(!bossBar.getPlayers().contains(player)) bossBar.addPlayer(player);
+            }
         }
     }
 

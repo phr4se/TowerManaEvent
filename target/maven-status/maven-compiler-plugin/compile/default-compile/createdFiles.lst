@@ -29,7 +29,6 @@ phrase\towerManaEvent\action\ActionTransformer.class
 phrase\towerManaEvent\event\EventManager$1.class
 phrase\towerManaEvent\gui\impl\MenuChancesProvider.class
 phrase\towerManaEvent\gui\impl\MenuChancesService.class
-phrase\towerManaEvent\util\Cooldown.class
 phrase\towerManaEvent\event\ability\Ability.class
 phrase\towerManaEvent\event\stage\StageType.class
 phrase\towerManaEvent\command\CommandLogger.class

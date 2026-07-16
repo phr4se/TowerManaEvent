@@ -200,7 +200,7 @@ public class EventManager {
         }.runTaskAsynchronously(plugin);
     }
 
-    private void stopEvent() {
+    public void stopEvent() {
         new BukkitRunnable() {
             @Override
             public void run() {
