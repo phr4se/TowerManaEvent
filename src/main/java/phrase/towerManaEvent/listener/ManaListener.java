@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,7 +28,7 @@ public class ManaListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onClickMenuChances(ClickMenuChancesEvent event) {
         if (event.getCurrentItem() == null) return;
         ItemStack itemStack = event.getCurrentItem();
@@ -51,7 +52,7 @@ public class ManaListener implements Listener {
         plugin.getMenuManager().showMenu(event.getPlayer(), MenuType.MENU_CHANCES);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCloseMenuChances(CloseMenuChancesEvent event) throws IOException {
         LootManager lootManager = plugin.getLootManager();
         final FileConfiguration fileConfiguration = plugin.getConfigFile().getFile("chances.yml");

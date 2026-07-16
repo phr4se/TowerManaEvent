@@ -9,6 +9,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -42,7 +43,7 @@ public class PlayerListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         PluginManager pluginManager = plugin.getServer().getPluginManager();
         if (event.getWhoClicked() instanceof Player player) {
@@ -74,7 +75,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
         EventManager eventManager = plugin.getEventManager();
         if (!eventManager.isEventRunning()) return;
@@ -84,7 +85,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
         if(event.getPlayer() instanceof Player player) {
             UUID playerUUID = player.getUniqueId();
@@ -95,7 +96,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         EventManager eventManager = plugin.getEventManager();
         if (!eventManager.isEventRunning()) return;
@@ -103,7 +104,7 @@ public class PlayerListener implements Listener {
         if (chest != null) event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof SkeletonHorse skeletonHorse) {
             if (skeletonHorse.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_skeleton_horse"), PersistentDataType.STRING))
@@ -111,7 +112,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
         EventManager eventManager = plugin.getEventManager();
         if (!eventManager.isEventRunning()) return;
@@ -126,7 +127,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Fireball fireball) {
             if (fireball.getPersistentDataContainer().has(NamespacedKey.fromString("towermanaevent_fireball"), PersistentDataType.DOUBLE)) {
@@ -140,7 +141,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         BossBar bossBar = plugin.getServer().getBossBar(NamespacedKey.fromString("towermanaevent_bossbar"));
         if(bossBar != null) {
@@ -153,7 +154,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         EventManager eventManager = plugin.getEventManager();
