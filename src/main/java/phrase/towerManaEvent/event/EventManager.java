@@ -178,24 +178,32 @@ public class EventManager {
             final long laterAirOrLightingDrop = settings.laterAirOrLightingDrop();
             @Override
             public void run() {
+                int i = 0;
                 final Set<Location> dropsLocation = schematicManager.getDropsLocation(boostY, countDrops);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        for (Location location : dropsLocation) {
+                for(Location location : dropsLocation) {
+                    final long newLaterAirOrLightingDrop = laterAirOrLightingDrop * i;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
                             Optional<ItemStack> optional = Arrays.stream(lootManager.getRandomLoots(101)).findAny();
-                            if (optional.isEmpty()) return;
+                            if (optional.isEmpty()) {
+                                plugin.getLogger().severe("Skip");
+                                return;
+                            }
                             final World world = location.getWorld();
                             ItemStack itemStack = optional.get();
                             if (withLighting) {
-                                world.strikeLightning(location);
+                                plugin.getLogger().severe("Strike lighting");
                                 location.setY(world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()));
+                                world.strikeLightning(location);
                             }
                             Item item = world.dropItem(location, itemStack);
+                            plugin.getLogger().severe("Drop item " + location.getX() + " " + location.getY() + " " + location.getZ());
                             item.setGlowing(true);
                         }
-                    }
-                }.runTaskLater(plugin, laterAirOrLightingDrop);
+                    }.runTaskLater(plugin, newLaterAirOrLightingDrop);
+                    i++;
+                }
             }
         }.runTaskAsynchronously(plugin);
     }

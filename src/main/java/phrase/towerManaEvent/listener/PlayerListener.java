@@ -6,16 +6,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -71,6 +69,17 @@ public class PlayerListener implements Listener {
                         });
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        EventManager eventManager = plugin.getEventManager();
+        if (!eventManager.isEventRunning()) return;
+        if(event.getEntity() instanceof Item) {
+            if(event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING) {
+                if(eventManager.getStage().isWithLighting()) event.setCancelled(true);
             }
         }
     }

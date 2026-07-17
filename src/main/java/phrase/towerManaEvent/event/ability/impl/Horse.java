@@ -1,5 +1,6 @@
 package phrase.towerManaEvent.event.ability.impl;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -46,6 +47,7 @@ public class Horse extends Ability {
         chest.subtractMana(mana);
         Vector perpendicular = new Vector(-location.getDirection().getZ(), 0, location.getDirection().getX());
         Map<Location, SkeletonHorse> skeletonHorses = new HashMap<>();
+        if(!location.getWorld().isChunkLoaded(location.getChunk())) location.getWorld().loadChunk(location.getChunk());
         for (int i = num1; i < num2; i++) {
             double offsetFromCenter = i * distance;
             Location offsetLocation = location.clone().add(perpendicular.clone().multiply(offsetFromCenter));

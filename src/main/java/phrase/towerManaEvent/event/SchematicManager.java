@@ -91,7 +91,7 @@ public class SchematicManager {
         final Random random = new Random();
         final Set<Location> dropsLocations = new HashSet<>();
         for(int i = 0; i < countDrops; i++) {
-            int newX = random.nextInt(maxX + 1 - minX) + minX, newY = minY + boostY, newZ = random.nextInt((maxZ + 1 - minZ) + minZ);
+            int newX = random.nextInt(maxX + 1 - minX) + minX, newY = minY + boostY, newZ = random.nextInt(maxZ + 1 - minZ) + minZ;
             final Location dropsLocation = new Location(world, newX, newY, newZ);
             dropsLocations.add(dropsLocation);
         }
