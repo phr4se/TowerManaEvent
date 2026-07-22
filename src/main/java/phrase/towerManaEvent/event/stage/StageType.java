@@ -5,9 +5,11 @@ import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.stage.impl.StageImpl;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public enum StageType {
+    PRE,
     ONE,
     TWO,
     THREE;
@@ -24,6 +26,20 @@ public enum StageType {
     public void initialize(TowerManaEvent plugin) {
         final ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("settings.stages");
         switch (this) {
+            case PRE -> {
+                final ConfigurationSection configurationSectionPre = configurationSection.getConfigurationSection("pre");
+                this.setStage(new StageImpl(
+                        1,
+                        configurationSectionPre.getBoolean("pvp"),
+                        configurationSectionPre.getInt("duration"),
+                        plugin,
+                        Collections.emptyList(),
+                        false,
+                        false,
+                        false,
+                        configurationSectionPre.getBoolean("included")
+                ));
+            }
             case ONE -> {
                 final ConfigurationSection configurationSectionOne = configurationSection.getConfigurationSection("one");
                 this.setStage(new StageImpl(

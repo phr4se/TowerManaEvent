@@ -1,19 +1,14 @@
 package phrase.towerManaEvent.event.stage.impl;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import phrase.towerManaEvent.TowerManaEvent;
 import phrase.towerManaEvent.event.ability.AbilityType;
 import phrase.towerManaEvent.event.EventManager;
 import phrase.towerManaEvent.event.stage.Stage;
 import phrase.towerManaEvent.util.MaskedRealType;
-import phrase.towerManaEvent.util.Utils;
 
 import java.util.List;
 import java.util.Random;
@@ -22,9 +17,14 @@ public class StageImpl extends Stage {
     private final List<AbilityType> availableAbilities;
 
     public StageImpl(int id, boolean pvp, int duration, TowerManaEvent plugin, List<AbilityType> availableAbilities, boolean openChest, boolean airOrLightingDrop, boolean withLighting) {
-        super(id, pvp, duration, plugin, openChest, airOrLightingDrop, withLighting);
+        this(id, pvp, duration, plugin, availableAbilities, openChest, airOrLightingDrop, withLighting, false);
+    }
+
+    public StageImpl(int id, boolean pvp, int duration, TowerManaEvent plugin, List<AbilityType> availableAbilities, boolean openChest, boolean airOrLightingDrop, boolean withLighting, boolean included) {
+        super(id, pvp, duration, plugin, openChest, airOrLightingDrop, withLighting, included);
         this.availableAbilities = availableAbilities;
     }
+
 
     @Override
     public void setup() {
@@ -66,6 +66,10 @@ public class StageImpl extends Stage {
             public void run() {
                 if (remained == 0) {
                     cancel();
+                    if(isIncluded()) {
+                        plugin.getEventManager().stopEvent();
+                        return;
+                    }
                     plugin.getEventManager().switchStage();
                 } else {
                     if (remained > 0) remained--;

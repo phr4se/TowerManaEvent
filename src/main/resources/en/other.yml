@@ -19,3 +19,9 @@ other:
     - "&d⚓ &fChest &d%status%"
     - ""
   bar-message: "&fCoordinates: &6%x% %y% %z% &8| &fStage: &6%stage% &8| &fStage ends in: &6%remaining% &8| &fPvP mode: &6%pvp%"
+  actions-pre-stage-event:
+    - "[message] &6╔"
+    - "[message] &6║ &fEvent pre started"
+    - "[message] &6║ &fCoordinates: &6%x% %y% %z%"
+    - "[message] &6╚"
+  player-activated-main-stage: "&fPlayer &e%player_name% &factivated main stage"

@@ -16,6 +16,7 @@ public abstract class Stage {
     private Ability latestUsedAbility;
     private final boolean airOrLightingDrop;
     private final boolean withLighting;
+    private boolean included;
 
     public Stage(int id, boolean pvp, int duration, TowerManaEvent plugin, boolean openChest, boolean airOrLightingDrop, boolean withLighting) {
         this.id = id;
@@ -26,6 +27,18 @@ public abstract class Stage {
         this.openChest = openChest;
         this.airOrLightingDrop = airOrLightingDrop;
         this.withLighting = withLighting;
+    }
+
+    public Stage(int id, boolean pvp, int duration, TowerManaEvent plugin, boolean openChest, boolean airOrLightingDrop, boolean withLighting, boolean included) {
+        this.id = id;
+        this.pvp = pvp;
+        this.plugin = plugin;
+        this.duration = duration;
+        this.remained = duration;
+        this.openChest = openChest;
+        this.airOrLightingDrop = airOrLightingDrop;
+        this.withLighting = withLighting;
+        this.included = included;
     }
 
     public abstract void setup();
@@ -62,6 +75,8 @@ public abstract class Stage {
     public boolean isPvp() {
         return pvp;
     }
+
+    public boolean isIncluded() { return included; }
 
     public void setLatestUsedAbility(Ability latestUsedAbility) {
         this.latestUsedAbility = latestUsedAbility;

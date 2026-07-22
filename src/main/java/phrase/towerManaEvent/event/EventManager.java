@@ -85,35 +85,66 @@ public class EventManager {
                         StageManager stageManager = plugin.getStageManager();
                         stage = stageManager.getFirstStage();
                         stage.setup();
-                        startTaskUseAbilities();
                         loots.values().forEach(loot -> hologramProvider.createHologram(loot.getLocation().clone().add(0.5, 2, 0.5), loot, plugin.getConfigFile().getOther().hologramLines()));
                         enableBossBar();
-                        List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getOther().actionsStartEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
-                        plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
-                        EventManager.this.bukkitTaskSearchPlayers = new BukkitRunnable() {
-                            final PrivilegeManager privilegeManager = plugin.getPrivilegeManager();
-
-                            @Override
-                            public void run() {
-                                for (Player player : plugin.getServer().getOnlinePlayers()) {
-                                    if (playerAtEvent(player)) {
-                                        if (!players.contains(player)) players.add(player);
-                                        if (privilegeManager.hasPrivilege(player)) {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    privilegeManager.disablePrivilege(player);
-                                                }
-                                            }.runTask(plugin);
-                                        }
-                                    } else players.remove(player);
+                        if(stage.isIncluded()) {
+                            final Other other = config.getOther();
+                            final List<String> actionsPreStageEvent = other.actionsPreStageEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
+                            plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(actionsPreStageEvent)));
+                            new BukkitRunnable() {
+                                final String playerActivatedMainStage = Utils.colorizer.colorize(other.playerActivatedMainStage());
+                                boolean activated = false;
+                                @Override
+                                public void run() {
+                                    if(!eventRunning) {
+                                        cancel();
+                                        return;
+                                    }
+                                    if(activated) {
+                                        stage = stageManager.getNextStage();
+                                        stage.setup();
+                                        startMainStageEvent();
+                                        cancel();
+                                        return;
+                                    }
+                                    plugin.getServer().getOnlinePlayers().stream().filter(EventManager.this::playerAtEvent).findAny().ifPresent(player -> {
+                                        final String newMessage = playerActivatedMainStage.replace("%player_name%", player.getName());
+                                        plugin.getServer().getOnlinePlayers().forEach(target -> Utils.sendMessage(target, newMessage));
+                                        activated = true;
+                                    });
                                 }
-                            }
-                        }.runTaskTimerAsynchronously(plugin, 0L, 20L);
+                            }.runTaskTimerAsynchronously(plugin, 0L, 20L);
+                        } else startMainStageEvent();
                     }
                 }.runTask(plugin);
             }
         }.runTaskAsynchronously(plugin);
+    }
+
+    private void startMainStageEvent() {
+        startTaskUseAbilities();
+        List<String> settingsReplacedPlaceholder = plugin.getConfigFile().getOther().actionsStartEvent().stream().map(EventManager.this::replacePlaceholder).collect(Collectors.toList());
+        plugin.getServer().getOnlinePlayers().forEach(player -> ActionExecutor.execute(player, ActionTransformer.transform(settingsReplacedPlaceholder)));
+        EventManager.this.bukkitTaskSearchPlayers = new BukkitRunnable() {
+            final PrivilegeManager privilegeManager = plugin.getPrivilegeManager();
+
+            @Override
+            public void run() {
+                for (Player player : plugin.getServer().getOnlinePlayers()) {
+                    if (playerAtEvent(player)) {
+                        if (!players.contains(player)) players.add(player);
+                        if (privilegeManager.hasPrivilege(player)) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    privilegeManager.disablePrivilege(player);
+                                }
+                            }.runTask(plugin);
+                        }
+                    } else players.remove(player);
+                }
+            }
+        }.runTaskTimerAsynchronously(plugin, 0L, 20L);
     }
 
     private void startTaskUseAbilities() {

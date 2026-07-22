@@ -6,6 +6,12 @@ other:
     - "&d⚓ &fСундук &d%status%"
     - ""
   bar-message: "&fКоординаты: &6%x% %y% %z% &8| &fСтадия: &6%stage% &8| &fСтадия закончится через: &6%remaining% &8| &fПвп-режим: &6%pvp%"
+  actions-pre-stage-event:
+    - "[message] &6╔"
+    - "[message] &6║ &fИвент почти запущен!"
+    - "[message] &6║ &fКоординаты: &6%x% %y% %z%"
+    - "[message] &6╚"
+  player-activated-main-stage: "&fИгрок &e%player_name% &fактивировал основную стадию"
   actions-start-event:
     - "[message] &6╔"
     - "[message] &6║ &fИвент запущен"

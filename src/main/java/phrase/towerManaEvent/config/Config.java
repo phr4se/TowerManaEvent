@@ -177,7 +177,9 @@ public class Config {
                 configurationSection.getStringList("actions-end-event"),
                 configurationSection.getStringList("actions-switch-stage"),
                 configurationSection.getStringList("hologram-lines"),
-                configurationSection.getString("bar-message"));
+                configurationSection.getString("bar-message"),
+                configurationSection.getStringList("actions-pre-stage-event"),
+                configurationSection.getString("player-activated-main-stage"));
     }
 
     public void setupAbilitiesSettings() {

@@ -7,6 +7,10 @@ settings:
   teleport: true
   later-air-or-lighting-drop: 480
   stages:
+    pre:
+      pvp: true
+      duration: 360
+      included: true
     one:
       pvp: true
       duration: 120
